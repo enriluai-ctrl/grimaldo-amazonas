@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-09-22 11:15",
+  "actualizado": "2026-09-22 11:20",
   "categorias": [
     {
       "nombre": "Diagnóstico oficial (cifras que duelen)",
@@ -31,33 +31,6 @@
           "emoji": "🏥",
           "url": "diapositivas.html#salud",
           "nota": "La solución en 5 pasos: postas conectadas, kits Bluetooth e IA clínica"
-        }
-      ]
-    },
-    {
-      "nombre": "Láminas completas para zoom y WhatsApp",
-      "icono": "🖼️",
-      "items": [
-        {
-          "titulo": "Infografía vertical de Salud",
-          "tipo": "imagen",
-          "emoji": "📋",
-          "url": "material/ruta-salud.png",
-          "nota": "Lámina completa en 1 sola imagen con zoom libre"
-        },
-        {
-          "titulo": "Infografía vertical de Educación",
-          "tipo": "imagen",
-          "emoji": "📋",
-          "url": "material/ruta-educacion.png",
-          "nota": "Lámina completa en 1 sola imagen con zoom libre"
-        },
-        {
-          "titulo": "Cifras globales y presupuesto oficial",
-          "tipo": "imagen",
-          "emoji": "📊",
-          "url": "material/propuesta-integral.png",
-          "nota": "475 postas, 8,131 docentes y 69% de ahorro regional"
         }
       ]
     },

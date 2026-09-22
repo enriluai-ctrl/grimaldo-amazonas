@@ -1,8 +1,7 @@
-// Service Worker — Grimaldo Amazonas v2
-// Estrategia: network-first para links.json, cache-first para shell e imágenes de material.
-// Las láminas de salud y educación quedan cacheadas en el teléfono para apertura instantánea en 0ms.
+// Service Worker — Grimaldo Amazonas
+// Estrategia: network-first para links.json, cache-first para shell, diapositivas y logos.
 
-const VERSION = 'grimaldo-hub-v5';
+const VERSION = 'grimaldo-hub-v6';
 const SHELL = [
   './',
   './index.html',
@@ -17,10 +16,7 @@ const SHELL = [
   './material/simbolo-victoria.png',
   './material/cedula-voto-x.png',
   './material/simbolo-marcado-x.png',
-  './material/badge-marca-x.png',
-  './material/ruta-salud.png',
-  './material/ruta-educacion.png',
-  './material/propuesta-integral.png'
+  './material/badge-marca-x.png'
 ];
 
 self.addEventListener('install', (e) => {

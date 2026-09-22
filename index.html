@@ -303,13 +303,12 @@
 </div>
 
 <script>
-  const EMOJIS = { link: '🔗', slides: '🖼️', nota: '📝', pdf: '📄', video: '🎬', imagen: '🖼️' };
+  const EMOJIS = { link: '🔗', slides: '📱', nota: '📝', pdf: '📄', video: '🎬', imagen: '🖼️' };
 
-  // PRECARGA INMEDIATA EN SEGUNDO PLANO (Apenas abre la web, las imágenes quedan en memoria)
+  // Precarga rápida del avatar y la cédula electoral
   const PRECARGAS = [
-    'material/ruta-salud.png',
-    'material/ruta-educacion.png',
-    'material/propuesta-integral.png'
+    'material/grimaldo-avatar.png',
+    'material/cedula-voto-x.png'
   ];
   PRECARGAS.forEach(src => {
     const i = new Image();
