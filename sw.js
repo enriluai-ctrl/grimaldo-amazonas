@@ -1,9 +1,8 @@
-// Service Worker — Grimaldo Amazonas
-// Estrategia: network-first para el menú (links.json) y la página,
-// para que el profesor SIEMPRE vea la versión nueva cuando hay internet.
-// El cache es solo respaldo sin señal.
+// Service Worker — Grimaldo Amazonas v2
+// Estrategia: network-first para links.json, cache-first para shell e imágenes de material.
+// Las láminas de salud y educación quedan cacheadas en el teléfono para apertura instantánea en 0ms.
 
-const VERSION = 'grimaldo-hub-v1';
+const VERSION = 'grimaldo-hub-v2';
 const SHELL = [
   './',
   './index.html',
@@ -11,7 +10,10 @@ const SHELL = [
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/apple-touch-icon.png',
+  './material/ruta-salud.png',
+  './material/ruta-educacion.png',
+  './material/propuesta-integral.png'
 ];
 
 self.addEventListener('install', (e) => {
@@ -40,7 +42,7 @@ self.addEventListener('fetch', (e) => {
     (req.headers.get('accept') || '').includes('text/html');
 
   if (esDatos || esNavegacion) {
-    // network-first: internet primero; si falla, última copia guardada
+    // network-first: internet primero para ver siempre novedades; si falla, cache local
     e.respondWith(
       fetch(req, { cache: 'no-store' })
         .then((res) => {
@@ -53,7 +55,7 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  // íconos y otros archivos: cache-first
+  // imágenes, íconos y assets: cache-first (ultra rápido) con respaldo de red
   e.respondWith(
     caches.match(req).then((m) => m || fetch(req).then((res) => {
       const copia = res.clone();

@@ -106,37 +106,21 @@
     aplicar();
   }
 
-  window.addEventListener('hashchange', cargarImagen);
-  cargarImagen();
-
-  let escala = 1, escalaMin = 1, escalaMax = 8;
-  let ox = 0, oy = 0;            // offset de la imagen (px)
-  let p0 = null, p1 = null;      // punteros activos
-  let inicio = null;             // estado al iniciar el gesto
-  let movio = false, ultimoTap = 0;
-
-  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-
-  function aplicar() {
-    // mantener la imagen dentro de limits razonables cuando esta ampliada
-    const r = img.getBoundingClientRect();
-    const maxX = Math.max(0, (r.width * escala - innerWidth) / 2) + 40;
-    const maxY = Math.max(0, (r.height * escala - innerHeight) / 2) + 40;
-    ox = clamp(ox, -maxX, maxX);
-    oy = clamp(oy, -maxY, maxY);
-    img.style.transform = `translate(${ox}px, ${oy}px) scale(${escala})`;
-    tZoom.textContent = Math.round(escala * 100) + '%';
+  function alCargar() {
+    const cargando = document.getElementById('cargando');
+    if (cargando) cargando.remove();
+    img.classList.add('lista');
+    setTimeout(() => { ayuda.style.opacity = '0'; }, 2000);
   }
 
-  img.addEventListener('load', () => {
-    document.getElementById('cargando').style.opacity = '0';
-    setTimeout(() => document.getElementById('cargando').remove(), 350);
-    img.classList.add('lista');
-    setTimeout(() => { ayuda.style.opacity = '0'; }, 2600);
-  });
+  img.addEventListener('load', alCargar);
   img.addEventListener('error', () => {
     document.getElementById('cargando').innerHTML = 'No se pudo cargar la imagen.<br><a href="./" style="color:#ffd76e">Volver al menú</a>';
   });
+
+  window.addEventListener('hashchange', cargarImagen);
+  cargarImagen();
+  if (img.complete && img.naturalWidth > 0) alCargar();
 
   function datosToque(e) {
     const ts = [...e.touches];
