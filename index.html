@@ -158,6 +158,43 @@
     padding: 9px 16px; font-weight: 800; font-size: .85rem;
   }
 
+  /* =========================================================================
+     BANNER Y SELLOS ELECTORALES (SOLO EN SOLUCIONES, NUNCA EN PROBLEMAS)
+     ========================================================================= */
+  .banner-soluciones-vota {
+    display: flex; align-items: center; gap: 14px;
+    background: linear-gradient(135deg, #1b2680 0%, #0b1138 100%);
+    border: 2px solid var(--rojo-vic);
+    border-radius: 18px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(27, 38, 128, .2);
+  }
+  .banner-soluciones-vota img {
+    width: 50px; height: 50px; border-radius: 10px; object-fit: contain; flex-shrink: 0;
+    border: 2px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,.3);
+  }
+  .banner-soluciones-vota .vota-txt b {
+    display: block; font-size: .88rem; color: #ffd54f; letter-spacing: .5px; text-transform: uppercase;
+  }
+  .banner-soluciones-vota .vota-txt span {
+    display: block; font-size: .78rem; color: #d6e2ff; margin-top: 2px; line-height: 1.35;
+  }
+
+  .badge-vota-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #fff; color: var(--azul-vic);
+    border: 1.5px solid var(--rojo-vic);
+    padding: 2px 8px; border-radius: 999px;
+    font-size: .68rem; font-weight: 900; text-transform: uppercase;
+    margin-top: 6px; width: fit-content;
+  }
+  .badge-vota-pill img {
+    width: 14px; height: 14px; border-radius: 2px; object-fit: contain;
+  }
+
   /* ====================================================================
      VISOR MODAL INSTANTÁNEO INTEGRADO (Cero pestañas nuevas, 0ms de espera)
      ==================================================================== */
@@ -293,6 +330,21 @@
       h2.textContent = (cat.icono || '📌') + ' ' + cat.nombre;
       sec.appendChild(h2);
 
+      const esSolucionCat = cat.nombre.toLowerCase().includes('soluciones') || cat.nombre.toLowerCase().includes('propuestas');
+
+      if (esSolucionCat) {
+        const ban = document.createElement('div');
+        ban.className = 'banner-soluciones-vota';
+        ban.innerHTML = `
+          <img src="material/cedula-voto-x.png" alt="Marca con una X">
+          <div class="vota-txt">
+            <b>PLAN DE GOBIERNO · VICTORIA AMAZONENSE</b>
+            <span>Para hacer realidad estas soluciones, en las elecciones marca con una <b>X</b></span>
+          </div>
+        `;
+        sec.appendChild(ban);
+      }
+
       for (const it of cat.items || []) {
         const a = document.createElement('a');
         a.className = 'tarjeta';
@@ -324,6 +376,13 @@
         small.textContent = it.nota || '';
         txt.append(b);
         if (it.nota) txt.append(small);
+
+        if (esSolucionCat) {
+          const pillVoto = document.createElement('div');
+          pillVoto.className = 'badge-vota-pill';
+          pillVoto.innerHTML = `<img src="material/cedula-voto-x.png" alt="X"> Marca con una X`;
+          txt.append(pillVoto);
+        }
 
         const tipo = document.createElement('span');
         tipo.className = 'tipo';

@@ -83,14 +83,25 @@ def generar_ruta(nombre_archivo, config):
     # Subtítulo explicativo
     d.text((50, 184), config["subtitulo"], font=F(23), fill=GRIS_CLARO)
 
-    # Mini insignia lateral profesor Grimaldo
-    box_w = 260
+    # Mini insignia lateral profesor Grimaldo + Símbolo marcado con X
+    cedula_path = os.path.join(BASE, "cedula-voto-x.png")
+    box_w = 310
     box_x = W - 50 - box_w
     box_y = 96
-    d.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + 105], radius=16, fill=(10, 32, 44), outline=accent, width=2)
-    d.text((box_x + box_w//2, box_y + 12), "PROPUESTA DE GESTIÓN", font=F(14, bold=True), fill=accent, anchor="mt")
-    d.text((box_x + box_w//2, box_y + 34), "PROFESOR GRIMALDO", font=F(18, bold=True), fill=BLANCO, anchor="mt")
-    d.text((box_x + box_w//2, box_y + 66), "⛰️ Amazonas para todos", font=F(14), fill=AMARILLO, anchor="mt")
+    d.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + 115], radius=16, fill=(10, 32, 44), outline=(229, 36, 36), width=3)
+    
+    if os.path.exists(cedula_path):
+        ced_im = Image.open(cedula_path).resize((90, 90), Image.Resampling.LANCZOS)
+        im.paste(ced_im, (box_x + 14, box_y + 12), ced_im)
+        txt_x = box_x + 114
+        d.text((txt_x, box_y + 16), "SOLUCIÓN REGIONAL", font=F(13, bold=True), fill=accent)
+        d.text((txt_x, box_y + 36), "MARCA LA X", font=F(22, bold=True), fill=(255, 60, 60))
+        d.text((txt_x, box_y + 66), "Victoria Amazonense", font=F(15, bold=True), fill=BLANCO)
+        d.text((txt_x, box_y + 88), "Prof. Grimaldo", font=F(13), fill=AMARILLO)
+    else:
+        d.text((box_x + box_w//2, box_y + 12), "PROPUESTA DE GESTIÓN", font=F(14, bold=True), fill=accent, anchor="mt")
+        d.text((box_x + box_w//2, box_y + 34), "PROFESOR GRIMALDO", font=F(18, bold=True), fill=BLANCO, anchor="mt")
+        d.text((box_x + box_w//2, box_y + 66), "⛰️ Amazonas para todos", font=F(14), fill=AMARILLO, anchor="mt")
 
     # Línea horizontal separadora
     d.line([(50, 230), (W - 50, 230)], fill=(20, 55, 70), width=2)
