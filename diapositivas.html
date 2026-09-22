@@ -59,11 +59,16 @@
   .sector-btn.activo-salud { background: var(--salud); color: #04121a; }
   .sector-btn.activo-edu { background: var(--edu); color: #04121a; }
 
-  /* Contenedor del Carrusel */
-  #carrusel {
+  /* Viewport y Contenedor del Carrusel */
+  #carrusel-viewport {
     position: absolute; inset: 0;
     top: calc(58px + env(safe-area-inset-top));
     bottom: calc(76px + env(safe-area-inset-bottom));
+    overflow: hidden;
+    width: 100%;
+  }
+  #carrusel {
+    height: 100%; width: 100%;
     display: flex;
     transition: transform .32s cubic-bezier(.2, .9, .3, 1);
     touch-action: pan-y;
@@ -192,7 +197,9 @@
   </div>
 </header>
 
-<div id="carrusel"></div>
+<div id="carrusel-viewport">
+  <div id="carrusel"></div>
+</div>
 
 <footer>
   <button id="btn-ant" class="nav-btn">‹ Ant</button>
