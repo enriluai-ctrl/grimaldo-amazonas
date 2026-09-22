@@ -1,7 +1,7 @@
 // Service Worker — Grimaldo Amazonas
 // Estrategia: network-first para links.json, cache-first para shell, diapositivas y logos.
 
-const VERSION = 'grimaldo-hub-v6';
+const VERSION = 'grimaldo-hub-v7';
 const SHELL = [
   './',
   './index.html',

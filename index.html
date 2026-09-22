@@ -194,69 +194,6 @@
   .badge-vota-pill img {
     width: 14px; height: 14px; border-radius: 2px; object-fit: contain;
   }
-
-  /* ====================================================================
-     VISOR MODAL INSTANTÁNEO INTEGRADO (Cero pestañas nuevas, 0ms de espera)
-     ==================================================================== */
-  #visor-modal {
-    position: fixed; inset: 0; z-index: 99999;
-    background: #04121a;
-    display: none; opacity: 0;
-    transition: opacity .18s ease;
-    overflow: hidden; touch-action: none;
-  }
-  #visor-modal.activo {
-    display: block; opacity: 1;
-  }
-
-  #visor-barra {
-    position: absolute; top: 0; left: 0; right: 0; z-index: 20;
-    display: flex; align-items: center; gap: 10px;
-    padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
-    background: linear-gradient(180deg, rgba(4,18,26,.95), rgba(4,18,26,.75));
-    backdrop-filter: blur(8px);
-    color: #fff;
-    transition: transform .2s ease;
-  }
-  #visor-barra.oculta { transform: translateY(-110%); }
-
-  #btn-cerrar {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 42px; height: 42px; border-radius: 12px;
-    background: rgba(255,255,255,.16); color: #fff; font-size: 24px;
-    border: none; cursor: pointer;
-  }
-  #btn-cerrar:active { background: rgba(255,255,255,.3); }
-
-  #visor-info { flex: 1; min-width: 0; }
-  #visor-info b { display: block; font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #visor-info small { opacity: .75; font-size: .75rem; }
-
-  #visor-zoom-lbl {
-    font-size: .75rem; font-weight: 700; background: rgba(0,229,163,.18);
-    color: #00e5a3; border: 1px solid rgba(0,229,163,.4);
-    padding: 6px 10px; border-radius: 999px; min-width: 52px; text-align: center;
-  }
-
-  #visor-escena {
-    position: absolute; inset: 0; z-index: 1;
-    display: flex; align-items: center; justify-content: center;
-    touch-action: none;
-  }
-  #visor-img {
-    max-width: 100vw; max-height: 100vh;
-    user-select: none; -webkit-user-drag: none;
-    transform-origin: center center;
-    transition: transform .05s linear;
-  }
-
-  #visor-hint {
-    position: absolute; bottom: calc(20px + env(safe-area-inset-bottom)); left: 50%;
-    transform: translateX(-50%); z-index: 10;
-    background: rgba(0,0,0,.65); color: #fff; font-size: .8rem;
-    padding: 8px 16px; border-radius: 999px; pointer-events: none;
-    transition: opacity .4s ease; white-space: nowrap;
-  }
 </style>
 </head>
 <body>
@@ -275,7 +212,7 @@
     <div class="skel"></div><div class="skel"></div><div class="skel"></div>
   </div>
   <p class="estado"><span class="punto ok" id="pto"></span><span id="conexion">Actualizado</span><br>
-  Si agregas un material nuevo, se ve aquí al abrir de nuevo.</p>
+  Diagnóstico y soluciones en diapositivas, letra grande para el celular.</p>
 </main>
 
 <div id="instalar">
@@ -284,112 +221,89 @@
   <button id="instalar-btn">OK</button>
 </div>
 
-<!-- ====================================================================
-     MODAL DEL VISOR CON ZOOM ULTRA-RÁPIDO (En la misma pantalla)
-     ==================================================================== -->
-<div id="visor-modal">
-  <div id="visor-barra">
-    <button id="btn-cerrar" aria-label="Cerrar">‹</button>
-    <div id="visor-info">
-      <b id="visor-titulo">Imagen</b>
-      <small>Pellizca para zoom · Doble toque para acercar</small>
-    </div>
-    <div id="visor-zoom-lbl">100%</div>
-  </div>
-  <div id="visor-escena">
-    <img id="visor-img" alt="Lámina de propuesta">
-  </div>
-  <div id="visor-hint">Pellizca para ampliar detalles</div>
-</div>
-
 <script>
-  const EMOJIS = { link: '🔗', slides: '📱', nota: '📝', pdf: '📄', video: '🎬', imagen: '🖼️' };
+  const EMOJIS = { link: "🔗", slides: "📱", nota: "📝", pdf: "📄", video: "🎬" };
 
-  // Precarga rápida del avatar y la cédula electoral
-  const PRECARGAS = [
-    'material/grimaldo-avatar.png',
-    'material/cedula-voto-x.png'
-  ];
-  PRECARGAS.forEach(src => {
-    const i = new Image();
-    i.src = src;
+  ["material/grimaldo-avatar.png", "material/cedula-voto-x.png"].forEach(function (src) {
+    const img = new Image();
+    img.src = src;
   });
 
+  function esLamina(it) {
+    const tipo = (it.tipo || "").toLowerCase();
+    const url = (it.url || "").toLowerCase();
+    const titulo = (it.titulo || "").toLowerCase();
+    if (tipo === "imagen") return true;
+    if (/\.(png|jpe?g|webp)(\?|$)/.test(url)) return true;
+    if (titulo.includes("infograf") || titulo.includes("lamina") || titulo.includes("lámina")) return true;
+    if (url.includes("ruta-salud") || url.includes("ruta-educacion") || url.includes("propuesta-integral")) return true;
+    return false;
+  }
+
   async function cargar() {
-    const resp = await fetch('links.json', { cache: 'no-store' });
-    if (!resp.ok) throw new Error('links.json ' + resp.status);
+    const resp = await fetch("links.json?v=" + Date.now(), { cache: "no-store" });
+    if (!resp.ok) throw new Error("links.json " + resp.status);
     const datos = await resp.json();
-    const menu = document.getElementById('menu');
-    menu.innerHTML = '';
+    const menu = document.getElementById("menu");
+    menu.innerHTML = "";
 
     for (const cat of datos.categorias || []) {
-      const sec = document.createElement('section');
-      sec.className = 'categoria';
-      const h2 = document.createElement('h2');
-      h2.textContent = (cat.icono || '📌') + ' ' + cat.nombre;
+      const items = (cat.items || []).filter(function (it) { return !esLamina(it); });
+      if (!items.length) continue;
+
+      const sec = document.createElement("section");
+      sec.className = "categoria";
+      const h2 = document.createElement("h2");
+      h2.textContent = (cat.icono || "📌") + " " + cat.nombre;
       sec.appendChild(h2);
 
-      const esSolucionCat = cat.nombre.toLowerCase().includes('soluciones') || cat.nombre.toLowerCase().includes('propuestas');
-
-      if (esSolucionCat) {
-        const ban = document.createElement('div');
-        ban.className = 'banner-soluciones-vota';
-        ban.innerHTML = `
-          <img src="material/cedula-voto-x.png" alt="Marca con una X">
-          <div class="vota-txt">
-            <b>PLAN DE GOBIERNO · VICTORIA AMAZONENSE</b>
-            <span>Para hacer realidad estas soluciones, en las elecciones marca con una <b>X</b></span>
-          </div>
-        `;
+      const esSolucion = cat.nombre.toLowerCase().includes("propuestas");
+      if (esSolucion) {
+        const ban = document.createElement("div");
+        ban.className = "banner-soluciones-vota";
+        ban.innerHTML = '<img src="material/cedula-voto-x.png" alt="Marca con una X"><div class="vota-txt"><b>PLAN DE GOBIERNO · VICTORIA AMAZONENSE</b><span>Para hacer realidad estas soluciones, en las elecciones marca con una <b>X</b></span></div>';
         sec.appendChild(ban);
       }
 
-      for (const it of cat.items || []) {
-        const a = document.createElement('a');
-        a.className = 'tarjeta';
+      for (const it of items) {
+        const a = document.createElement("a");
+        a.className = "tarjeta";
         a.href = it.url;
-
-        if (it.tipo === 'imagen') {
-          // ABRE EN EL VISOR INSTANTÁNEO EN 0 SEGUNDOS (Sin abrir pestañas)
-          a.addEventListener('click', (e) => {
-            e.preventDefault();
-            abrirVisorInstantaneo(it.url, it.titulo);
-          });
-        } else if (it.url && it.url.startsWith('diapositivas.html')) {
-          // Diapositivas en la misma pantalla sin abrir pestañas nuevas
-          a.target = '_self';
-        } else if (it.tipo === 'pdf' || it.tipo === 'slides') {
-          a.target = '_blank';
-          a.rel = 'noopener';
+        if (it.url && it.url.startsWith("diapositivas.html")) {
+          a.target = "_self";
+        } else {
+          a.target = "_blank";
+          a.rel = "noopener";
         }
 
-        const emoji = document.createElement('div');
-        emoji.className = 'emoji';
-        emoji.textContent = it.emoji || EMOJIS[it.tipo] || '🔗';
+        const emoji = document.createElement("div");
+        emoji.className = "emoji";
+        emoji.textContent = it.emoji || EMOJIS[it.tipo] || "🔗";
 
-        const txt = document.createElement('div');
-        txt.className = 'txt';
-        const b = document.createElement('b');
+        const txt = document.createElement("div");
+        txt.className = "txt";
+        const b = document.createElement("b");
         b.textContent = it.titulo;
-        const small = document.createElement('small');
-        small.textContent = it.nota || '';
-        txt.append(b);
-        if (it.nota) txt.append(small);
-
-        if (esSolucionCat) {
-          const pillVoto = document.createElement('div');
-          pillVoto.className = 'badge-vota-pill';
-          pillVoto.innerHTML = `<img src="material/cedula-voto-x.png" alt="X"> Marca con una X`;
-          txt.append(pillVoto);
+        txt.appendChild(b);
+        if (it.nota) {
+          const small = document.createElement("small");
+          small.textContent = it.nota;
+          txt.appendChild(small);
+        }
+        if (esSolucion) {
+          const pill = document.createElement("div");
+          pill.className = "badge-vota-pill";
+          pill.innerHTML = '<img src="material/cedula-voto-x.png" alt=""> Marca con una X';
+          txt.appendChild(pill);
         }
 
-        const tipo = document.createElement('span');
-        tipo.className = 'tipo';
-        tipo.textContent = it.tipo === 'link' ? 'web' : it.tipo;
+        const tipo = document.createElement("span");
+        tipo.className = "tipo";
+        tipo.textContent = it.tipo === "link" ? "web" : "diapositivas";
 
-        const fl = document.createElement('span');
-        fl.className = 'flecha';
-        fl.textContent = '›';
+        const fl = document.createElement("span");
+        fl.className = "flecha";
+        fl.textContent = "›";
 
         a.append(emoji, txt, tipo, fl);
         sec.appendChild(a);
@@ -397,193 +311,32 @@
       menu.appendChild(sec);
     }
 
-    const pto = document.getElementById('pto');
-    const con = document.getElementById('conexion');
-    pto.className = 'punto ok';
-    con.textContent = 'Al día · ' + (datos.actualizado || '');
+    document.getElementById("pto").className = "punto ok";
+    document.getElementById("conexion").textContent = "Al día · " + (datos.actualizado || "");
   }
 
-  cargar().catch(() => {
-    const pto = document.getElementById('pto');
-    const con = document.getElementById('conexion');
-    pto.className = 'punto off';
-    con.textContent = 'Sin conexión · mostrando última copia guardada';
+  cargar().catch(function () {
+    document.getElementById("pto").className = "punto off";
+    document.getElementById("conexion").textContent = "Sin conexión · mostrando última copia guardada";
   });
 
-  // =========================================================================
-  // CONTROLADOR DEL VISOR ULTRA-RÁPIDO CON ZOOM INTEGRADO
-  // =========================================================================
-  const modal = document.getElementById('visor-modal');
-  const visorImg = document.getElementById('visor-img');
-  const visorTitulo = document.getElementById('visor-titulo');
-  const zoomLbl = document.getElementById('visor-zoom-lbl');
-  const visorBarra = document.getElementById('visor-barra');
-  const visorHint = document.getElementById('visor-hint');
-  const visorEscena = document.getElementById('visor-escena');
-  const btnCerrar = document.getElementById('btn-cerrar');
-
-  let escala = 1, escalaMin = 1, escalaMax = 8;
-  let ox = 0, oy = 0;
-  let p0 = null, p1 = null, inicio = null, movio = false, ultimoTap = 0;
-
-  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-
-  function aplicarTransform() {
-    const r = visorImg.getBoundingClientRect();
-    const maxX = Math.max(0, (r.width * escala - window.innerWidth) / 2) + 30;
-    const maxY = Math.max(0, (r.height * escala - window.innerHeight) / 2) + 30;
-    ox = clamp(ox, -maxX, maxX);
-    oy = clamp(oy, -maxY, maxY);
-    visorImg.style.transform = `translate(${ox}px, ${oy}px) scale(${escala})`;
-    zoomLbl.textContent = Math.round(escala * 100) + '%';
-    visorBarra.classList.toggle('oculta', escala > 1.6);
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").then(function (reg) { reg.update(); });
+  }
+  if ("caches" in window) {
+    caches.keys().then(function (keys) {
+      return Promise.all(keys.filter(function (k) { return k !== "grimaldo-hub-v7"; }).map(function (k) { return caches.delete(k); }));
+    });
   }
 
-  function abrirVisorInstantaneo(url, titulo) {
-    // Extraer el archivo real (ej: visor.html#ruta-salud.png -> material/ruta-salud.png)
-    let archivo = url.includes('#') ? url.split('#')[1] : url;
-    if (!archivo.startsWith('http') && !archivo.startsWith('material/') && !archivo.includes('/')) {
-      archivo = 'material/' + archivo;
-    }
-
-    visorImg.src = archivo; // Como ya está precargada en memoria, se muestra en 0.01 seg
-    visorTitulo.textContent = titulo;
-    escala = 1; ox = 0; oy = 0;
-    aplicarTransform();
-
-    modal.style.display = 'block';
-    // Forzar reflow para animación suave
-    void modal.offsetWidth;
-    modal.classList.add('activo');
-    visorHint.style.opacity = '1';
-    setTimeout(() => { visorHint.style.opacity = '0'; }, 2200);
-
-    // Integrar con el botón Atrás del celular
-    window.history.pushState({ visorAbierto: true }, '');
+  const aviso = document.getElementById("instalar");
+  const esApp = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+  if (!esApp && !localStorage.getItem("avisoInstalacionVisto")) {
+    setTimeout(function () { aviso.classList.add("mostrar"); }, 1500);
   }
-
-  function cerrarVisor() {
-    modal.classList.remove('activo');
-    setTimeout(() => {
-      modal.style.display = 'none';
-      visorImg.src = '';
-    }, 180);
-  }
-
-  btnCerrar.addEventListener('click', () => {
-    if (window.history.state && window.history.state.visorAbierto) {
-      window.history.back();
-    } else {
-      cerrarVisor();
-    }
-  });
-
-  window.addEventListener('popstate', () => {
-    cerrarVisor();
-  });
-
-  // Gestos táctiles ultra-fluidos
-  function touchData(e) {
-    const ts = [...e.touches];
-    if (ts.length === 0) return null;
-    if (ts.length === 1) return { x: ts[0].clientX, y: ts[0].clientY, dist: 0, cx: ts[0].clientX, cy: ts[0].clientY };
-    const [a, b] = ts;
-    return {
-      x: a.clientX, y: a.clientY,
-      dist: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY),
-      cx: (a.clientX + b.clientX) / 2,
-      cy: (a.clientY + b.clientY) / 2
-    };
-  }
-
-  visorEscena.addEventListener('touchstart', (e) => {
-    movio = false;
-    p0 = touchData(e);
-    inicio = { escala, ox, oy, p: p0 };
-  }, { passive: true });
-
-  visorEscena.addEventListener('touchmove', (e) => {
-    if (!inicio) return;
-    e.preventDefault();
-    p1 = touchData(e);
-    movio = true;
-
-    if (p1.dist && inicio.p.dist) {
-      // Zoom por pellizco centrado en los dedos
-      const factor = p1.dist / inicio.p.dist;
-      const nueva = clamp(inicio.escala * factor, escalaMin, escalaMax);
-      const k = nueva / inicio.escala;
-      const dx = p1.cx - window.innerWidth / 2;
-      const dy = p1.cy - window.innerHeight / 2;
-      ox = dx - (dx - inicio.ox) * k;
-      oy = dy - (dy - inicio.oy) * k;
-      escala = nueva;
-    } else {
-      // Arrastre cuando hay zoom
-      ox = inicio.ox + (p1.cx - inicio.p.cx);
-      oy = inicio.oy + (p1.cy - inicio.p.cy);
-      if (escala <= 1.01) { ox = 0; oy = 0; }
-    }
-    aplicarTransform();
-  }, { passive: false });
-
-  visorEscena.addEventListener('touchend', (e) => {
-    if (!movio && e.changedTouches.length === 1) {
-      const t = e.changedTouches[0];
-      const ahora = Date.now();
-      if (ahora - ultimoTap < 300) {
-        // Doble toque: alterna 100% y 250%
-        const destino = escala > 1.1 ? 1 : 2.5;
-        if (destino > 1) {
-          const dx = t.clientX - window.innerWidth / 2;
-          const dy = t.clientY - window.innerHeight / 2;
-          const k = destino / escala;
-          ox = dx - (dx - ox) * k;
-          oy = dy - (dy - oy) * k;
-        }
-        escala = destino;
-        if (escala <= 1.01) { ox = 0; oy = 0; }
-        aplicarTransform();
-      }
-      ultimoTap = ahora;
-    }
-    if (e.touches.length === 0) {
-      inicio = null;
-    } else {
-      p0 = touchData(e);
-      inicio = { escala, ox, oy, p: p0 };
-    }
-  });
-
-  // Soporte rueda de mouse en PC
-  visorEscena.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
-    const nueva = clamp(escala * factor, escalaMin, escalaMax);
-    const k = nueva / escala;
-    const dx = e.clientX - window.innerWidth / 2;
-    const dy = e.clientY - window.innerHeight / 2;
-    ox = dx - (dx - ox) * k;
-    oy = dy - (dy - oy) * k;
-    escala = nueva;
-    if (escala <= 1.01) { ox = 0; oy = 0; }
-    aplicarTransform();
-  }, { passive: false });
-
-  // Registrar Service Worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-
-  // Aviso de instalación PWA
-  const aviso = document.getElementById('instalar');
-  const esApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  if (!esApp && !localStorage.getItem('avisoInstalacionVisto')) {
-    setTimeout(() => aviso.classList.add('mostrar'), 1500);
-  }
-  document.getElementById('instalar-btn').addEventListener('click', () => {
-    localStorage.setItem('avisoInstalacionVisto', '1');
-    aviso.classList.remove('mostrar');
+  document.getElementById("instalar-btn").addEventListener("click", function () {
+    localStorage.setItem("avisoInstalacionVisto", "1");
+    aviso.classList.remove("mostrar");
   });
 </script>
 </body>
