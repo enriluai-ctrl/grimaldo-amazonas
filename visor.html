@@ -93,7 +93,14 @@
   const esUrl = nombre.startsWith('http') || nombre.startsWith('/');
   const yaTieneRuta = nombre.includes('/');
   img.src = esUrl || yaTieneRuta ? nombre : 'material/' + nombre;
-  document.getElementById('t-titulo').textContent = nombre.split('/').pop().replace(/\.[a-z]+$/i, '').replace(/-/g, ' ');
+  const TITULOS = {
+    'ruta-salud.png': 'Ruta de Salud (Telemedicina)',
+    'ruta-educacion.png': 'Ruta de Educación (Colegios Técnicos)',
+    'ruta-desarrollo.png': 'Ruta del Desarrollo (5 Pasos)',
+    'propuesta-integral.png': 'Cifras y Sustento Integral'
+  };
+  const baseNombre = nombre.split('/').pop();
+  document.getElementById('t-titulo').textContent = TITULOS[baseNombre] || baseNombre.replace(/\.[a-z]+$/i, '').replace(/-/g, ' ');
 
   let escala = 1, escalaMin = 1, escalaMax = 8;
   let ox = 0, oy = 0;            // offset de la imagen (px)

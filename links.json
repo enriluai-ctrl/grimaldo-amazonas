@@ -1,47 +1,50 @@
 {
-  "actualizado": "2026-09-22 09:35",
+  "actualizado": "2026-09-22 09:45",
   "categorias": [
     {
-      "nombre": "Para mostrar al público",
-      "icono": "⭐",
+      "nombre": "Ruta del desarrollo (explicar en celular)",
+      "icono": "🗺️",
       "items": [
         {
-          "titulo": "La ruta del desarrollo (paso a paso)",
+          "titulo": "Ruta de Salud — Telemedicina rural",
           "tipo": "imagen",
-          "emoji": "🗺️",
-          "url": "visor.html#ruta-desarrollo.png",
-          "nota": "Flujo en 5 pasos estilo lámina: fácil de explicar y entender para todos"
+          "emoji": "🏥",
+          "url": "visor.html#ruta-salud.png",
+          "nota": "Postas conectadas, equipos Bluetooth e IA clínica en 5 pasos"
         },
         {
-          "titulo": "Cifras y sustento técnico integral",
+          "titulo": "Ruta de Educación — Colegios técnicos",
           "tipo": "imagen",
-          "emoji": "📊",
+          "emoji": "🎓",
+          "url": "visor.html#ruta-educacion.png",
+          "nota": "Maestros capacitados y secundarias productivas en 5 pasos"
+        }
+      ]
+    },
+    {
+      "nombre": "Sustento y plataformas completas",
+      "icono": "📊",
+      "items": [
+        {
+          "titulo": "Cifras oficiales y presupuesto",
+          "tipo": "imagen",
+          "emoji": "📋",
           "url": "visor.html#propuesta-integral.png",
-          "nota": "Datos oficiales: 475 postas, 8,131 docentes y 69% de ahorro"
-        }
-      ]
-    },
-    {
-      "nombre": "Salud",
-      "icono": "🏥",
-      "items": [
+          "nota": "475 postas, 8,131 docentes y 69% de ahorro regional"
+        },
         {
-          "titulo": "Salud Amazonas — Telemedicina",
+          "titulo": "Plataforma web de Salud",
           "tipo": "link",
+          "emoji": "🌐",
           "url": "https://enrilubo.github.io/salud-amazonas-landing/",
-          "nota": "Propuesta completa: postas rurales, equipos Bluetooth, IA clínica"
-        }
-      ]
-    },
-    {
-      "nombre": "Educación",
-      "icono": "🎓",
-      "items": [
+          "nota": "Propuesta detallada para las 4 Redes de Salud (RIS)"
+        },
         {
-          "titulo": "Educación Amazonas — Propuestas",
+          "titulo": "Plataforma web de Educación",
           "tipo": "link",
+          "emoji": "🌐",
           "url": "https://enriluai-ctrl.github.io/educacion-amazonas/landing.html#propuestas",
-          "nota": "Las 5 palancas: Maestro Rural, colegios técnicos, formación docente"
+          "nota": "Propuesta detallada para las 10 UGELs de Amazonas"
         }
       ]
     }
