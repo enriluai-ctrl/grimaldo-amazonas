@@ -1,48 +1,68 @@
 {
-  "actualizado": "2026-09-22 09:45",
+  "actualizado": "2026-09-22 10:15",
   "categorias": [
     {
-      "nombre": "Ruta del desarrollo (explicar en celular)",
-      "icono": "🗺️",
+      "nombre": "Ruta del desarrollo (diapositivas en celular)",
+      "icono": "📱",
       "items": [
         {
-          "titulo": "Ruta de Salud — Telemedicina rural",
-          "tipo": "imagen",
+          "titulo": "Ruta de Salud — Diapositivas paso a paso",
+          "tipo": "slides",
           "emoji": "🏥",
-          "url": "visor.html#ruta-salud.png",
-          "nota": "Postas conectadas, equipos Bluetooth e IA clínica en 5 pasos"
+          "url": "diapositivas.html#salud",
+          "nota": "Pantalla completa con letra grande: desliza con el dedo los 5 pasos"
         },
         {
-          "titulo": "Ruta de Educación — Colegios técnicos",
-          "tipo": "imagen",
+          "titulo": "Ruta de Educación — Diapositivas paso a paso",
+          "tipo": "slides",
           "emoji": "🎓",
-          "url": "visor.html#ruta-educacion.png",
-          "nota": "Maestros capacitados y secundarias productivas en 5 pasos"
+          "url": "diapositivas.html#educacion",
+          "nota": "Pantalla completa con letra grande: desliza con el dedo los 5 pasos"
         }
       ]
     },
     {
-      "nombre": "Sustento y plataformas completas",
-      "icono": "📊",
+      "nombre": "Láminas completas para zoom y WhatsApp",
+      "icono": "🖼️",
       "items": [
         {
-          "titulo": "Cifras oficiales y presupuesto",
+          "titulo": "Infografía vertical de Salud",
           "tipo": "imagen",
           "emoji": "📋",
-          "url": "visor.html#propuesta-integral.png",
-          "nota": "475 postas, 8,131 docentes y 69% de ahorro regional"
+          "url": "material/ruta-salud.png",
+          "nota": "Lámina completa en 1 sola imagen con zoom libre"
         },
         {
-          "titulo": "Plataforma web de Salud",
+          "titulo": "Infografía vertical de Educación",
+          "tipo": "imagen",
+          "emoji": "📋",
+          "url": "material/ruta-educacion.png",
+          "nota": "Lámina completa en 1 sola imagen con zoom libre"
+        },
+        {
+          "titulo": "Cifras globales y presupuesto oficial",
+          "tipo": "imagen",
+          "emoji": "📊",
+          "url": "material/propuesta-integral.png",
+          "nota": "475 postas, 8,131 docentes y 69% de ahorro regional"
+        }
+      ]
+    },
+    {
+      "nombre": "Plataformas web oficiales",
+      "icono": "🌐",
+      "items": [
+        {
+          "titulo": "Plataforma web de Salud (Telemedicina)",
           "tipo": "link",
-          "emoji": "🌐",
+          "emoji": "🏥",
           "url": "https://enrilubo.github.io/salud-amazonas-landing/",
           "nota": "Propuesta detallada para las 4 Redes de Salud (RIS)"
         },
         {
-          "titulo": "Plataforma web de Educación",
+          "titulo": "Plataforma web de Educación (Docentes)",
           "tipo": "link",
-          "emoji": "🌐",
+          "emoji": "🎓",
           "url": "https://enriluai-ctrl.github.io/educacion-amazonas/landing.html#propuestas",
           "nota": "Propuesta detallada para las 10 UGELs de Amazonas"
         }

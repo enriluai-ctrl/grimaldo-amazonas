@@ -2,10 +2,11 @@
 // Estrategia: network-first para links.json, cache-first para shell e imágenes de material.
 // Las láminas de salud y educación quedan cacheadas en el teléfono para apertura instantánea en 0ms.
 
-const VERSION = 'grimaldo-hub-v2';
+const VERSION = 'grimaldo-hub-v3';
 const SHELL = [
   './',
   './index.html',
+  './diapositivas.html',
   './links.json',
   './manifest.webmanifest',
   './icons/icon-192.png',

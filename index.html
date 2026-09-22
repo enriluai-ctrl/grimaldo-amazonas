@@ -238,6 +238,9 @@
             e.preventDefault();
             abrirVisorInstantaneo(it.url, it.titulo);
           });
+        } else if (it.url && it.url.startsWith('diapositivas.html')) {
+          // Diapositivas en la misma pantalla sin abrir pestañas nuevas
+          a.target = '_self';
         } else if (it.tipo === 'pdf' || it.tipo === 'slides') {
           a.target = '_blank';
           a.rel = 'noopener';

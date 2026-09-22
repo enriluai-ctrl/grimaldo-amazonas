@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#04121a">
+<title>Presentación — Grimaldo Amazonas</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+  :root {
+    --fondo: #04121a;
+    --card: #081c26;
+    --borde: #123444;
+    --tinta: #ffffff;
+    --gris: #cadbe3;
+    --gris-tenue: #7a98a6;
+    --salud: #00e5a3;
+    --salud-glow: rgba(0, 229, 163, .25);
+    --edu: #ffb74d;
+    --edu-glow: rgba(255, 183, 77, .25);
+    --amarillo: #ffd54f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    height: 100%; width: 100%; overflow: hidden;
+    background: var(--fondo);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--tinta);
+  }
+
+  /* Barra superior fija */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: calc(10px + env(safe-area-inset-top)) 14px 10px;
+    background: rgba(4, 18, 26, .92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--borde);
+  }
+  .btn-volver {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 14px; border-radius: 999px;
+    background: rgba(255, 255, 255, .1); color: #fff;
+    text-decoration: none; font-size: .88rem; font-weight: 600;
+  }
+  .btn-volver:active { background: rgba(255, 255, 255, .25); }
+
+  /* Selector Salud / Educación en el header */
+  .sector-switch {
+    display: flex; background: #07161f; border-radius: 999px; padding: 3px; border: 1px solid var(--borde);
+  }
+  .sector-btn {
+    padding: 6px 14px; border-radius: 999px; border: none; background: transparent;
+    color: var(--gris-tenue); font-size: .82rem; font-weight: 700; cursor: pointer;
+    transition: all .2s ease;
+  }
+  .sector-btn.activo-salud { background: var(--salud); color: #04121a; }
+  .sector-btn.activo-edu { background: var(--edu); color: #04121a; }
+
+  /* Contenedor del Carrusel */
+  #carrusel {
+    position: absolute; inset: 0;
+    top: calc(58px + env(safe-area-inset-top));
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    display: flex;
+    transition: transform .32s cubic-bezier(.2, .9, .3, 1);
+    touch-action: pan-y;
+  }
+
+  /* Diapositiva individual (100% de la pantalla) */
+  .slide {
+    flex: 0 0 100%; width: 100%; height: 100%;
+    padding: 16px 20px 20px;
+    display: flex; flex-direction: column; justify-content: center;
+    overflow-y: auto;
+  }
+
+  .slide-card {
+    background: var(--card);
+    border: 2px solid var(--borde);
+    border-radius: 26px;
+    padding: 26px 22px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, .45);
+    display: flex; flex-direction: column; gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .tema-salud .slide-card { border-color: rgba(0, 229, 163, .35); }
+  .tema-salud .slide-card.destacada { border-color: var(--salud); box-shadow: 0 0 30px var(--salud-glow); }
+  .tema-edu .slide-card { border-color: rgba(255, 183, 77, .35); }
+  .tema-edu .slide-card.destacada { border-color: var(--edu); box-shadow: 0 0 30px var(--edu-glow); }
+
+  /* Encabezado del paso */
+  .paso-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px;
+    padding: 6px 14px; border-radius: 999px; width: fit-content;
+  }
+  .tema-salud .paso-badge { background: rgba(0, 229, 163, .16); color: var(--salud); }
+  .tema-edu .paso-badge { background: rgba(255, 183, 77, .16); color: var(--edu); }
+
+  .slide-header { display: flex; align-items: center; gap: 14px; }
+  .slide-icono {
+    font-size: 2.8rem; line-height: 1; flex-shrink: 0;
+  }
+  .slide-titulos h2 {
+    font-size: 1.55rem; font-weight: 800; line-height: 1.2; color: #fff;
+  }
+  .slide-titulos p {
+    font-size: .95rem; font-weight: 600; margin-top: 4px; line-height: 1.3;
+  }
+  .tema-salud .slide-titulos p { color: var(--salud); }
+  .tema-edu .slide-titulos p { color: var(--edu); }
+
+  /* Viñetas en letra grande */
+  .slide-bullets {
+    display: flex; flex-direction: column; gap: 14px;
+    margin-top: 6px;
+  }
+  .bullet-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 1.08rem; line-height: 1.45; color: var(--gris);
+  }
+  .bullet-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    margin-top: 7px; flex-shrink: 0;
+  }
+  .tema-salud .bullet-dot { background: var(--salud); box-shadow: 0 0 8px var(--salud); }
+  .tema-edu .bullet-dot { background: var(--edu); box-shadow: 0 0 8px var(--edu); }
+
+  /* Slide especial de portada o cierre */
+  .hero-slide { text-align: center; align-items: center; gap: 18px; }
+  .hero-slide h1 { font-size: 2rem; font-weight: 900; line-height: 1.15; }
+  .hero-slide .hero-sub { font-size: 1.15rem; color: var(--gris); line-height: 1.4; max-width: 90%; }
+  .metrica-box {
+    background: rgba(255, 213, 79, .1); border: 2px solid var(--amarillo);
+    border-radius: 20px; padding: 18px 20px; width: 100%; text-align: center;
+  }
+  .metrica-num { font-size: 2.1rem; font-weight: 900; color: var(--amarillo); display: block; }
+  .metrica-txt { font-size: .98rem; font-weight: 600; color: #fff; margin-top: 4px; }
+  .cita-profe {
+    font-size: 1.02rem; font-style: italic; color: var(--gris);
+    border-left: 3px solid var(--salud); padding-left: 14px; text-align: left;
+  }
+  .tema-edu .cita-profe { border-left-color: var(--edu); }
+
+  /* Barra inferior de navegación */
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+    height: calc(72px + env(safe-area-inset-bottom));
+    padding: 8px 18px env(safe-area-inset-bottom);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: rgba(4, 18, 26, .96);
+    border-top: 1px solid var(--borde);
+  }
+  .nav-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    height: 46px; padding: 0 18px; border-radius: 999px;
+    border: none; font-size: .95rem; font-weight: 700; cursor: pointer;
+    background: rgba(255, 255, 255, .14); color: #fff;
+    transition: all .15s ease;
+  }
+  .nav-btn:active { transform: scale(.96); }
+  .nav-btn.primary-salud { background: var(--salud); color: #04121a; }
+  .nav-btn.primary-edu { background: var(--edu); color: #04121a; }
+  .nav-btn:disabled { opacity: .25; pointer-events: none; }
+
+  /* Indicadores de puntos */
+  .dots-box { display: flex; align-items: center; gap: 6px; }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255, 255, 255, .25);
+    transition: all .25s ease;
+  }
+  .tema-salud .dot.activo { width: 22px; border-radius: 999px; background: var(--salud); }
+  .tema-edu .dot.activo { width: 22px; border-radius: 999px; background: var(--edu); }
+</style>
+</head>
+<body class="tema-salud">
+
+<header>
+  <a class="btn-volver" href="./" aria-label="Volver al menú">‹ Menú</a>
+  <div class="sector-switch">
+    <button id="tab-salud" class="sector-btn activo-salud">🏥 Salud</button>
+    <button id="tab-edu" class="sector-btn">🎓 Educación</button>
+  </div>
+</header>
+
+<div id="carrusel"></div>
+
+<footer>
+  <button id="btn-ant" class="nav-btn">‹ Ant</button>
+  <div class="dots-box" id="dots"></div>
+  <button id="btn-sig" class="nav-btn primary-salud">Sig ›</button>
+</footer>
+
+<script>
+  // DATOS COMPLETOS DE AMBOS SECTORES
+  const DATOS = {
+    salud: {
+      temaClase: 'tema-salud',
+      btnClase: 'primary-salud',
+      slides: [
+        {
+          tipo: 'portada',
+          badge: '📍 475 POSTAS RURALES · AMAZONAS',
+          icono: '🏥',
+          titulo: 'Ruta de Salud',
+          sub: 'La posta más lejana con médico presente para tu familia',
+          bullets: [
+            'Propuesta técnica y comprobada del Profesor Grimaldo.',
+            'Funciona 100% sin depender de internet ni antenas.',
+            'Atención médica digna y oportuna en tu propia comunidad.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '1 DE 5',
+          icono: '💓',
+          titulo: 'Kits Médicos Bluetooth',
+          sub: 'Herramientas simples y universales',
+          bullets: [
+            'Oxímetro, tensiómetro y termómetro conectados al celular común.',
+            'Cero computadoras caras ni software pesado que se malogra.',
+            'El técnico enciende el equipo y el resultado aparece solo en pantalla.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '2 DE 5',
+          icono: '⚡',
+          titulo: '100% Sin Internet',
+          sub: 'Diseñado para cualquier comunidad',
+          bullets: [
+            'No depende de internet ni de antenas que se caen con la lluvia.',
+            'La consulta se atiende y se guarda segura en el teléfono.',
+            'Sincroniza automáticamente en minutos apenas detecta señal.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '3 DE 5',
+          icono: '🤖',
+          titulo: 'Asistente Clínico 24/7',
+          sub: 'Guía médica al instante',
+          bullets: [
+            'Orienta al personal de la posta en segundos ante urgencias.',
+            'Protocolos rápidos para mordeduras de serpientes, dengue y fiebres.',
+            'El personal de salud nunca más está solo frente al peligro.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '4 DE 5',
+          icono: '🩺',
+          titulo: 'Teleconsulta con Médico',
+          sub: 'El especialista atiende a distancia',
+          bullets: [
+            'Doctores de la Red Integrada de Salud validan diagnósticos y recetas.',
+            'Tratamiento seguro y supervisado por profesionales colegiados.',
+            'Interconsulta directa con los hospitales de referencia de la región.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '5 DE 5',
+          icono: '🏠',
+          titulo: 'Atención en tu Pueblo',
+          sub: 'Salud oportuna para las familias',
+          bullets: [
+            'Se acabaron los viajes de días en lancha o trocha a Chachapoyas.',
+            'Tratamiento temprano antes de que la enfermedad se complique.',
+            'Familias protegidas y atendidas con dignidad en su propio lugar.'
+          ]
+        },
+        {
+          tipo: 'cierre',
+          badge: 'PROPUESTA DE GESTIÓN SOSTENIBLE',
+          icono: '⛰️',
+          titulo: 'Salud Digna en Amazonas',
+          metricaNum: '69% MÁS BARATO',
+          metricaTxt: 'Con el mismo presupuesto atendemos al TRIPLE de postas',
+          cita: '“Educación y salud es la columna vertebral del desarrollo de cualquier pueblo” — Prof. Augusto Grimaldo'
+        }
+      ]
+    },
+    educacion: {
+      temaClase: 'tema-edu',
+      btnClase: 'primary-edu',
+      slides: [
+        {
+          tipo: 'portada',
+          badge: '📚 8,131 DOCENTES · 153,616 ALUMNOS',
+          icono: '🎓',
+          titulo: 'Ruta de Educación',
+          sub: 'Maestros capacitados y secundarias técnicas productivas',
+          bullets: [
+            'Propuesta de formación rural del Profesor Grimaldo.',
+            'Cursos de las mejores universidades del país al celular del docente.',
+            'Carreras técnicas para que los jóvenes tengan empleo en su tierra.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '1 DE 5',
+          icono: '📱',
+          titulo: 'Estudio en la Comunidad',
+          sub: 'Capacitación sin internet permanente',
+          bullets: [
+            'El maestro descarga los módulos con cualquier señal ocasional.',
+            'Estudia offline en su celular sin gastar en recargas ni datos.',
+            'Formación continua adaptada al tiempo y realidad del docente.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '2 DE 5',
+          icono: '🏛️',
+          titulo: 'Universidades al Campo',
+          sub: 'La mejor calidad académica del país',
+          bullets: [
+            'Cursos de la Católica, Cantuta, Villarreal y Agraria.',
+            'Contenidos pedagógicos modernos directo al teléfono del profesor.',
+            'Misma calidad que en las mejores aulas de la capital.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '3 DE 5',
+          icono: '🏫',
+          titulo: 'El Maestro no Deja su Aula',
+          sub: 'Cero gastos de traslado y viáticos',
+          bullets: [
+            'El docente se capacita sin abandonar a sus alumnos ni un solo día.',
+            'Certificación oficial con valor académico y puntaje en escalafón.',
+            'Sin viajes largos ni viáticos que desgastan al maestro.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '4 DE 5',
+          icono: '⚙️',
+          titulo: 'Colegios Técnicos Productivos',
+          sub: 'Secundarias según la riqueza de cada provincia',
+          bullets: [
+            'Especialidades locales: café, cacao, agro, madera y ganadería.',
+            'Talleres prácticos con equipamiento y convenios con institutos.',
+            'Colegios que forman a los técnicos que cada pueblo necesita.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '5 DE 5',
+          icono: '💼',
+          titulo: 'Futuro y Empleo Local',
+          sub: 'Jóvenes que progresan en su tierra',
+          bullets: [
+            'Nuestros hijos se quedan a trabajar y liderar en Amazonas.',
+            'Transformamos las materias primas con talento técnico propio.',
+            'Desarrollo y trabajo digno para las 7 provincias de la región.'
+          ]
+        },
+        {
+          tipo: 'cierre',
+          badge: 'PROPUESTA DE GESTIÓN SOSTENIBLE',
+          icono: '⛰️',
+          titulo: 'Educación con Futuro',
+          metricaNum: '69% MÁS BARATO',
+          metricaTxt: 'Con el mismo presupuesto capacitamos a 3 VECES más maestros',
+          cita: '“Educación y salud es la columna vertebral del desarrollo de cualquier pueblo” — Prof. Augusto Grimaldo'
+        }
+      ]
+    }
+  };
+
+  // ESTADO ACTUAL
+  let sectorActual = location.hash.includes('edu') ? 'educacion' : 'salud';
+  let slideActual = 0;
+
+  const carrusel = document.getElementById('carrusel');
+  const dotsBox = document.getElementById('dots');
+  const btnAnt = document.getElementById('btn-ant');
+  const btnSig = document.getElementById('btn-sig');
+  const tabSalud = document.getElementById('tab-salud');
+  const tabEdu = document.getElementById('tab-edu');
+
+  function renderSector(sectorKey) {
+    sectorActual = sectorKey;
+    slideActual = 0;
+    const info = DATOS[sectorKey];
+
+    document.body.className = info.temaClase;
+    btnSig.className = 'nav-btn ' + info.btnClase;
+
+    tabSalud.className = 'sector-btn ' + (sectorKey === 'salud' ? 'activo-salud' : '');
+    tabEdu.className = 'sector-btn ' + (sectorKey === 'educacion' ? 'activo-edu' : '');
+
+    // Construir Slides
+    carrusel.innerHTML = '';
+    dotsBox.innerHTML = '';
+
+    info.slides.forEach((s, idx) => {
+      const slideDiv = document.createElement('div');
+      slideDiv.className = 'slide';
+
+      const card = document.createElement('div');
+      card.className = 'slide-card' + (s.tipo === 'cierre' || s.tipo === 'portada' ? ' destacada' : '');
+
+      if (s.tipo === 'portada') {
+        card.innerHTML = `
+          <div class="paso-badge">${s.badge}</div>
+          <div class="slide-header">
+            <span class="slide-icono">${s.icono}</span>
+            <div class="slide-titulos">
+              <h2>${s.titulo}</h2>
+              <p>${s.sub}</p>
+            </div>
+          </div>
+          <div class="slide-bullets">
+            ${s.bullets.map(b => `
+              <div class="bullet-item">
+                <span class="bullet-dot"></span>
+                <span>${b}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (s.tipo === 'paso') {
+        card.innerHTML = `
+          <div class="paso-badge">PASO ${s.paso}</div>
+          <div class="slide-header">
+            <span class="slide-icono">${s.icono}</span>
+            <div class="slide-titulos">
+              <h2>${s.titulo}</h2>
+              <p>${s.sub}</p>
+            </div>
+          </div>
+          <div class="slide-bullets">
+            ${s.bullets.map(b => `
+              <div class="bullet-item">
+                <span class="bullet-dot"></span>
+                <span>${b}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (s.tipo === 'cierre') {
+        card.innerHTML = `
+          <div class="paso-badge">${s.badge}</div>
+          <div class="hero-slide">
+            <span class="slide-icono" style="font-size:3.4rem">${s.icono}</span>
+            <h1>${s.titulo}</h1>
+            <div class="metrica-box">
+              <span class="metrica-num">${s.metricaNum}</span>
+              <span class="metrica-txt">${s.metricaTxt}</span>
+            </div>
+            <p class="cita-profe">${s.cita}</p>
+          </div>
+        `;
+      }
+
+      slideDiv.appendChild(card);
+      carrusel.appendChild(slideDiv);
+
+      // Crear dot
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (idx === 0 ? ' activo' : '');
+      dot.addEventListener('click', () => irASlide(idx));
+      dotsBox.appendChild(dot);
+    });
+
+    actualizarNav();
+  }
+
+  function irASlide(n) {
+    const total = DATOS[sectorActual].slides.length;
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slideActual = n;
+    carrusel.style.transform = `translateX(-${slideActual * 100}%)`;
+
+    // Actualizar dots
+    const dots = dotsBox.querySelectorAll('.dot');
+    dots.forEach((d, i) => d.classList.toggle('activo', i === slideActual));
+
+    actualizarNav();
+  }
+
+  function actualizarNav() {
+    const total = DATOS[sectorActual].slides.length;
+    btnAnt.disabled = (slideActual === 0);
+    if (slideActual === total - 1) {
+      btnSig.textContent = 'Inicio ↺';
+    } else {
+      btnSig.textContent = 'Sig ›';
+    }
+  }
+
+  btnAnt.addEventListener('click', () => irASlide(slideActual - 1));
+  btnSig.addEventListener('click', () => {
+    const total = DATOS[sectorActual].slides.length;
+    if (slideActual === total - 1) {
+      irASlide(0);
+    } else {
+      irASlide(slideActual + 1);
+    }
+  });
+
+  tabSalud.addEventListener('click', () => {
+    location.hash = '#salud';
+    renderSector('salud');
+  });
+  tabEdu.addEventListener('click', () => {
+    location.hash = '#educacion';
+    renderSector('educacion');
+  });
+
+  // GESTOS TÁCTILES SWIPE HORIZONTAL (Arrastrar diapositivas con el dedo)
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+
+  carrusel.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  carrusel.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diffX = touchEndX - touchStartX;
+    const diffY = Math.abs(e.changedTouches[0].screenY - touchStartY);
+
+    // Solo cambiar si el swipe fue más horizontal que vertical y mayor a 45px
+    if (Math.abs(diffX) > 45 && Math.abs(diffX) > diffY) {
+      if (diffX < 0) {
+        // Deslizó a la izquierda -> siguiente
+        irASlide(slideActual + 1);
+      } else {
+        // Deslizó a la derecha -> anterior
+        irASlide(slideActual - 1);
+      }
+    }
+  }, { passive: true });
+
+  // Teclado flechas en PC
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') irASlide(slideActual + 1);
+    if (e.key === 'ArrowLeft') irASlide(slideActual - 1);
+  });
+
+  // Inicializar
+  renderSector(sectorActual);
+</script>
+</body>
+</html>
