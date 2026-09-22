@@ -1,16 +1,23 @@
 {
-  "actualizado": "2026-09-22 09:10",
+  "actualizado": "2026-09-22 09:35",
   "categorias": [
     {
       "nombre": "Para mostrar al público",
       "icono": "⭐",
       "items": [
         {
-          "titulo": "Propuesta integral en una imagen",
+          "titulo": "La ruta del desarrollo (paso a paso)",
           "tipo": "imagen",
-          "emoji": "🖼️",
+          "emoji": "🗺️",
+          "url": "visor.html#ruta-desarrollo.png",
+          "nota": "Flujo en 5 pasos estilo lámina: fácil de explicar y entender para todos"
+        },
+        {
+          "titulo": "Cifras y sustento técnico integral",
+          "tipo": "imagen",
+          "emoji": "📊",
           "url": "visor.html#propuesta-integral.png",
-          "nota": "Salud + Educación en una sola lámina, con zoom para mostrar detalles"
+          "nota": "Datos oficiales: 475 postas, 8,131 docentes y 69% de ahorro"
         }
       ]
     },
@@ -34,7 +41,7 @@
           "titulo": "Educación Amazonas — Propuestas",
           "tipo": "link",
           "url": "https://enriluai-ctrl.github.io/educacion-amazonas/landing.html#propuestas",
-          "nota": "Las 5 palancas: Maestro Rural, colegios técnicos, red Awajún-Wampis"
+          "nota": "Las 5 palancas: Maestro Rural, colegios técnicos, formación docente"
         }
       ]
     }
