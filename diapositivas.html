@@ -20,6 +20,8 @@
     --salud-glow: rgba(0, 229, 163, .25);
     --edu: #ffb74d;
     --edu-glow: rgba(255, 183, 77, .25);
+    --alerta: #ff5470;
+    --alerta-glow: rgba(255, 84, 112, .25);
     --amarillo: #ffd54f;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -99,6 +101,8 @@
   .tema-salud .slide-card.destacada { border-color: var(--salud); box-shadow: 0 0 32px var(--salud-glow); }
   .tema-edu .slide-card { border-color: rgba(255, 183, 77, .45); }
   .tema-edu .slide-card.destacada { border-color: var(--edu); box-shadow: 0 0 32px var(--edu-glow); }
+  .tema-alerta .slide-card { border-color: rgba(255, 84, 112, .45); }
+  .tema-alerta .slide-card.destacada { border-color: var(--alerta); box-shadow: 0 0 32px var(--alerta-glow); }
 
   /* Encabezado del paso */
   .paso-badge {
@@ -108,6 +112,7 @@
   }
   .tema-salud .paso-badge { background: rgba(0, 229, 163, .18); color: var(--salud); border: 1px solid rgba(0, 229, 163, .3); }
   .tema-edu .paso-badge { background: rgba(255, 183, 77, .18); color: var(--edu); border: 1px solid rgba(255, 183, 77, .3); }
+  .tema-alerta .paso-badge { background: rgba(255, 84, 112, .18); color: var(--alerta); border: 1px solid rgba(255, 84, 112, .3); }
 
   .slide-header { display: flex; align-items: center; gap: 16px; }
   .slide-icono {
@@ -121,6 +126,7 @@
   }
   .tema-salud .slide-titulos p { color: var(--salud); }
   .tema-edu .slide-titulos p { color: var(--edu); }
+  .tema-alerta .slide-titulos p { color: var(--alerta); }
 
   /* Viñetas en letra grande */
   .slide-bullets {
@@ -137,6 +143,7 @@
   }
   .tema-salud .bullet-dot { background: var(--salud); box-shadow: 0 0 10px var(--salud); }
   .tema-edu .bullet-dot { background: var(--edu); box-shadow: 0 0 10px var(--edu); }
+  .tema-alerta .bullet-dot { background: var(--alerta); box-shadow: 0 0 10px var(--alerta); }
 
   /* Slide especial de portada o cierre */
   .hero-slide { text-align: center; align-items: center; gap: 20px; }
@@ -154,6 +161,7 @@
     margin-top: 6px;
   }
   .tema-edu .cita-profe { border-left-color: var(--edu); }
+  .tema-alerta .cita-profe { border-left-color: var(--alerta); }
 
   /* Barra inferior de navegación */
   footer {
@@ -185,15 +193,19 @@
   }
   .tema-salud .dot.activo { width: 22px; border-radius: 999px; background: var(--salud); }
   .tema-edu .dot.activo { width: 22px; border-radius: 999px; background: var(--edu); }
+  .tema-alerta .dot.activo { width: 22px; border-radius: 999px; background: var(--alerta); }
+  .sector-btn.activo-alerta { background: var(--alerta); color: #04121a; }
+  .nav-btn.primary-alerta { background: var(--alerta); color: #04121a; }
 </style>
 </head>
-<body class="tema-salud">
+<body class="tema-alerta">
 
 <header>
   <a class="btn-volver" href="./" aria-label="Volver al menú">‹ Menú</a>
   <div class="sector-switch">
-    <button id="tab-salud" class="sector-btn activo-salud">🏥 Salud</button>
-    <button id="tab-edu" class="sector-btn">🎓 Educación</button>
+    <button id="tab-diag" class="sector-btn activo-alerta">⚠️ Problemas</button>
+    <button id="tab-edu" class="sector-btn">🎓 Solución</button>
+    <button id="tab-salud" class="sector-btn">🏥 Salud</button>
   </div>
 </header>
 
@@ -208,91 +220,91 @@
 </footer>
 
 <script>
-  // DATOS COMPLETOS DE AMBOS SECTORES
+  // DATOS COMPLETOS DE LOS TRES EJES
   const DATOS = {
-    salud: {
-      temaClase: 'tema-salud',
-      btnClase: 'primary-salud',
+    problemas: {
+      temaClase: 'tema-alerta',
+      btnClase: 'primary-alerta',
       slides: [
         {
           tipo: 'portada',
-          badge: '📍 475 POSTAS RURALES · AMAZONAS',
-          icono: '🏥',
-          titulo: 'Ruta de Salud',
-          sub: 'La posta más lejana con médico presente para tu familia',
+          badge: '📊 FUENTES MINEDU · CENSO 2025 · ENDI 2023',
+          icono: '⚠️',
+          titulo: 'La Realidad Educativa',
+          sub: '5 brechas encadenadas que el Estado no atiende en Amazonas',
           bullets: [
-            'Propuesta técnica y comprobada del Profesor Grimaldo.',
-            'Funciona 100% sin depender de internet ni antenas.',
-            'Atención médica digna y oportuna en tu propia comunidad.'
+            '7 de cada 10 estudiantes y docentes de Amazonas son rurales.',
+            'Datos oficiales validados punto por punto con el Prof. Grimaldo.',
+            'Un diagnóstico innegable para sustentar el cambio urgente.'
           ]
         },
         {
           tipo: 'paso',
           paso: '1 DE 5',
-          icono: '💓',
-          titulo: 'Kits Médicos Bluetooth',
-          sub: 'Herramientas simples y universales',
+          icono: '🏚️',
+          titulo: '82% de Escuelas Sin Internet',
+          sub: '70% sin agua, 70% sin desagüe y 37% sin electricidad',
           bullets: [
-            'Oxímetro, tensiómetro y termómetro conectados al celular común.',
-            'Cero computadoras caras ni software pesado que se malogra.',
-            'El técnico enciende el equipo y el resultado aparece solo en pantalla.'
+            '1,847 de los 2,248 colegios de Amazonas NO tienen conexión a internet.',
+            '9 de cada 10 primarias (90.7%) con infraestructura física inadecuada (PMI MINEDU).',
+            'La tecnología offline no es un capricho: es una urgencia de supervivencia.'
           ]
         },
         {
           tipo: 'paso',
           paso: '2 DE 5',
-          icono: '⚡',
-          titulo: '100% Sin Internet',
-          sub: 'Diseñado para cualquier comunidad',
+          icono: '👨‍🏫',
+          titulo: '8,131 Docentes Sin Capacitación',
+          sub: 'El 97% QUIERE estudiar, pero el 67% no recibe nada del Estado',
           bullets: [
-            'No depende de internet ni de antenas que se caen con la lluvia.',
-            'La consulta se atiende y se guarda segura en el teléfono.',
-            'Sincroniza automáticamente en minutos apenas detecta señal.'
+            '73% de los maestros de Amazonas (8,131 docentes) trabajan en el campo.',
+            'Para capacitarse deben viajar días a Chachapoyas o Lima gastando su sueldo.',
+            'El 54% de directivos rurales indica que la falta de internet les impide capacitarse.'
           ]
         },
         {
           tipo: 'paso',
           paso: '3 DE 5',
-          icono: '🤖',
-          titulo: 'Asistente Clínico 24/7',
-          sub: 'Guía médica al instante',
+          icono: '🚪',
+          titulo: 'La Sangría Escolar',
+          sub: '1 de cada 4 niños de primaria NUNCA llega a la secundaria',
           bullets: [
-            'Orienta al personal de la posta en segundos ante urgencias.',
-            'Protocolos rápidos para mordeduras de serpientes, dengue y fiebres.',
-            'El personal de salud nunca más está solo frente al peligro.'
+            'Caída estructural del 23.1%: 14,447 niños desaparecen del sistema al pasar a secundaria.',
+            'En secundaria, cada promoción pierde 10% de sus alumnos cada 2 años.',
+            'Pico de deserción entre 2° y 3° año por distancias extremas y trabajo infantil.'
           ]
         },
         {
           tipo: 'paso',
           paso: '4 DE 5',
-          icono: '🩺',
-          titulo: 'Teleconsulta con Médico',
-          sub: 'El especialista atiende a distancia',
+          icono: '⚙️',
+          titulo: 'Solo 6 Colegios Técnicos',
+          sub: 'De 4,879 servicios educativos, solo el 0.12% forma técnicos',
           bullets: [
-            'Doctores de la Red Integrada de Salud validan diagnósticos y recetas.',
-            'Tratamiento seguro y supervisado por profesionales colegiados.',
-            'Interconsulta directa con los hospitales de referencia de la región.'
+            'El presupuesto por alumno técnico cayó -22%, mientras el universitario creció +400%.',
+            'Amazonas produce profesionales de oficina desempleados, pero cero técnicos para el campo.',
+            'Talleres de carpintería y criaderos abandonados por falta de herramientas (caso Chipe y Bagua).'
           ]
         },
         {
           tipo: 'paso',
           paso: '5 DE 5',
-          icono: '🏠',
-          titulo: 'Atención en tu Pueblo',
-          sub: 'Salud oportuna para las familias',
+          icono: '🏹',
+          titulo: '979 Escuelas Originarias Aisladas',
+          sub: '1 de cada 5 colegios enseña en Awajún o Wampis, pero solo 4 son técnicos',
           bullets: [
-            'Se acabaron los viajes de días en lancha o trocha a Chachapoyas.',
-            'Tratamiento temprano antes de que la enfermedad se complique.',
-            'Familias protegidas y atendidas con dignidad en su propio lugar.'
+            'Solo 92 colegios interculturales bilingües (EIB) llegan a secundaria en toda la región.',
+            'De 10 UGELs, 6 son meramente operativas y dependen 100% de la DREA para cualquier trámite.',
+            'Las 4 UGELs bilingües (Imaza, Condorcanqui, Santiago, Cenepa) marginadas del presupuesto.'
           ]
         },
         {
           tipo: 'cierre',
-          badge: 'PROPUESTA DE GESTIÓN SOSTENIBLE',
-          icono: '⛰️',
-          titulo: 'Salud Digna en Amazonas',
-          metricaNum: '69% MÁS BARATO',
-          metricaTxt: 'Con el mismo presupuesto atendemos al TRIPLE de postas',
+          badge: 'EL DIAGNÓSTICO EN CIFRAS',
+          icono: '⚖️',
+          titulo: 'Un Sistema que Expulsa al Joven',
+          metricaNum: '14,447 NIÑOS FUERA',
+          metricaTxt: 'Se quedan en el camino entre primaria y secundaria',
           cita: '“Educación y salud es la columna vertebral del desarrollo de cualquier pueblo” — Prof. Augusto Grimaldo'
         }
       ]
@@ -383,19 +395,111 @@
           cita: '“Educación y salud es la columna vertebral del desarrollo de cualquier pueblo” — Prof. Augusto Grimaldo'
         }
       ]
+    },
+    salud: {
+      temaClase: 'tema-salud',
+      btnClase: 'primary-salud',
+      slides: [
+        {
+          tipo: 'portada',
+          badge: '📍 475 POSTAS RURALES · AMAZONAS',
+          icono: '🏥',
+          titulo: 'Ruta de Salud',
+          sub: 'La posta más lejana con médico presente para tu familia',
+          bullets: [
+            'Propuesta técnica y comprobada del Profesor Grimaldo.',
+            'Funciona 100% sin depender de internet ni antenas.',
+            'Atención médica digna y oportuna en tu propia comunidad.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '1 DE 5',
+          icono: '💓',
+          titulo: 'Kits Médicos Bluetooth',
+          sub: 'Herramientas simples y universales',
+          bullets: [
+            'Oxímetro, tensiómetro y termómetro conectados al celular común.',
+            'Cero computadoras caras ni software pesado que se malogra.',
+            'El técnico enciende el equipo y el resultado aparece solo en pantalla.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '2 DE 5',
+          icono: '⚡',
+          titulo: '100% Sin Internet',
+          sub: 'Diseñado para cualquier comunidad',
+          bullets: [
+            'No depende de internet ni de antenas que se caen con la lluvia.',
+            'La consulta se atiende y se guarda segura en el teléfono.',
+            'Sincroniza automáticamente en minutos apenas detecta señal.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '3 DE 5',
+          icono: '🤖',
+          titulo: 'Asistente Clínico 24/7',
+          sub: 'Guía médica al instante',
+          bullets: [
+            'Orienta al personal de la posta en segundos ante urgencias.',
+            'Protocolos rápidos para mordeduras de serpientes, dengue y fiebres.',
+            'El personal de salud nunca más está solo frente al peligro.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '4 DE 5',
+          icono: '🩺',
+          titulo: 'Teleconsulta con Médico',
+          sub: 'El especialista atiende a distancia',
+          bullets: [
+            'Doctores de la Red Integrada de Salud validan diagnósticos y recetas.',
+            'Tratamiento seguro y supervisado por profesionales colegiados.',
+            'Interconsulta directa con los hospitales de referencia de la región.'
+          ]
+        },
+        {
+          tipo: 'paso',
+          paso: '5 DE 5',
+          icono: '🏠',
+          titulo: 'Atención en tu Pueblo',
+          sub: 'Salud oportuna para las familias',
+          bullets: [
+            'Se acabaron los viajes de días en lancha o trocha a Chachapoyas.',
+            'Tratamiento temprano antes de que la enfermedad se complique.',
+            'Familias protegidas y atendidas con dignidad en su propio lugar.'
+          ]
+        },
+        {
+          tipo: 'cierre',
+          badge: 'PROPUESTA DE GESTIÓN SOSTENIBLE',
+          icono: '⛰️',
+          titulo: 'Salud Digna en Amazonas',
+          metricaNum: '69% MÁS BARATO',
+          metricaTxt: 'Con el mismo presupuesto atendemos al TRIPLE de postas',
+          cita: '“Educación y salud es la columna vertebral del desarrollo de cualquier pueblo” — Prof. Augusto Grimaldo'
+        }
+      ]
     }
   };
 
   // ESTADO ACTUAL
-  let sectorActual = location.hash.includes('edu') ? 'educacion' : 'salud';
+  let sectorActual = 'problemas';
+  if (location.hash.includes('salud')) sectorActual = 'salud';
+  else if (location.hash.includes('educacion')) sectorActual = 'educacion';
+  else if (location.hash.includes('problema') || location.hash.includes('diag')) sectorActual = 'problemas';
+
   let slideActual = 0;
 
   const carrusel = document.getElementById('carrusel');
   const dotsBox = document.getElementById('dots');
   const btnAnt = document.getElementById('btn-ant');
   const btnSig = document.getElementById('btn-sig');
-  const tabSalud = document.getElementById('tab-salud');
+  const tabDiag = document.getElementById('tab-diag');
   const tabEdu = document.getElementById('tab-edu');
+  const tabSalud = document.getElementById('tab-salud');
 
   function renderSector(sectorKey) {
     sectorActual = sectorKey;
@@ -405,8 +509,9 @@
     document.body.className = info.temaClase;
     btnSig.className = 'nav-btn ' + info.btnClase;
 
-    tabSalud.className = 'sector-btn ' + (sectorKey === 'salud' ? 'activo-salud' : '');
+    tabDiag.className = 'sector-btn ' + (sectorKey === 'problemas' ? 'activo-alerta' : '');
     tabEdu.className = 'sector-btn ' + (sectorKey === 'educacion' ? 'activo-edu' : '');
+    tabSalud.className = 'sector-btn ' + (sectorKey === 'salud' ? 'activo-salud' : '');
 
     // Construir Slides
     carrusel.innerHTML = '';
@@ -519,13 +624,17 @@
     }
   });
 
-  tabSalud.addEventListener('click', () => {
-    location.hash = '#salud';
-    renderSector('salud');
+  tabDiag.addEventListener('click', () => {
+    location.hash = '#problemas';
+    renderSector('problemas');
   });
   tabEdu.addEventListener('click', () => {
     location.hash = '#educacion';
     renderSector('educacion');
+  });
+  tabSalud.addEventListener('click', () => {
+    location.hash = '#salud';
+    renderSector('salud');
   });
 
   // GESTOS TÁCTILES SWIPE HORIZONTAL (Arrastrar diapositivas con el dedo)

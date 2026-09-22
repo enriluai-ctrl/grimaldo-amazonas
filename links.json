@@ -1,23 +1,36 @@
 {
-  "actualizado": "2026-09-22 10:15",
+  "actualizado": "2026-09-22 10:45",
   "categorias": [
     {
-      "nombre": "Ruta del desarrollo (diapositivas en celular)",
-      "icono": "📱",
+      "nombre": "Diagnóstico oficial (cifras que duelen)",
+      "icono": "⚠️",
       "items": [
         {
-          "titulo": "Ruta de Salud — Diapositivas paso a paso",
+          "titulo": "La Realidad de Educación — 5 Problemas en Cifras",
           "tipo": "slides",
-          "emoji": "🏥",
-          "url": "diapositivas.html#salud",
-          "nota": "Pantalla completa con letra grande: desliza con el dedo los 5 pasos"
-        },
+          "emoji": "⚠️",
+          "url": "diapositivas.html#problemas",
+          "nota": "Datos MINEDU: 82% sin internet, 67% docentes sin capacitar, 14,447 niños expulsados y solo 6 colegios técnicos"
+        }
+      ]
+    },
+    {
+      "nombre": "Propuestas de gestión (soluciones paso a paso)",
+      "icono": "🗺️",
+      "items": [
         {
           "titulo": "Ruta de Educación — Diapositivas paso a paso",
           "tipo": "slides",
           "emoji": "🎓",
           "url": "diapositivas.html#educacion",
-          "nota": "Pantalla completa con letra grande: desliza con el dedo los 5 pasos"
+          "nota": "La solución en 5 pasos: maestros actualizados y secundarias técnicas productivas por provincia"
+        },
+        {
+          "titulo": "Ruta de Salud — Diapositivas paso a paso",
+          "tipo": "slides",
+          "emoji": "🏥",
+          "url": "diapositivas.html#salud",
+          "nota": "La solución en 5 pasos: postas conectadas, kits Bluetooth e IA clínica"
         }
       ]
     },
@@ -53,18 +66,18 @@
       "icono": "🌐",
       "items": [
         {
+          "titulo": "Plataforma web de Educación (Diagnóstico + Propuestas)",
+          "tipo": "link",
+          "emoji": "🎓",
+          "url": "https://enriluai-ctrl.github.io/educacion-amazonas/landing.html#problema",
+          "nota": "Diagnóstico MINEDU detallado para las 10 UGELs de Amazonas"
+        },
+        {
           "titulo": "Plataforma web de Salud (Telemedicina)",
           "tipo": "link",
           "emoji": "🏥",
           "url": "https://enrilubo.github.io/salud-amazonas-landing/",
           "nota": "Propuesta detallada para las 4 Redes de Salud (RIS)"
-        },
-        {
-          "titulo": "Plataforma web de Educación (Docentes)",
-          "tipo": "link",
-          "emoji": "🎓",
-          "url": "https://enriluai-ctrl.github.io/educacion-amazonas/landing.html#propuestas",
-          "nota": "Propuesta detallada para las 10 UGELs de Amazonas"
         }
       ]
     }
