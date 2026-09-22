@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0e7a5f">
-<title>Grimaldo Amazonas</title>
+<meta name="theme-color" content="#1b2680">
+<title>Grimaldo Vásquez Tan — Gobernador Regional</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -12,41 +12,99 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
   :root {
-    --verde: #0e7a5f;
-    --verde-osc: #07281d;
-    --verde-clr: #d9f2e7;
-    --crema: #f4efe3;
-    --tinta: #1d2a25;
-    --sombra: 0 10px 24px rgba(7, 40, 29, .16);
+    --azul-vic: #1b2680;
+    --azul-intenso: #2535aa;
+    --azul-osc: #0b1138;
+    --azul-claro: #eef3ff;
+    --azul-borde: #c8d7fa;
+    --rojo-vic: #e52424;
+    --rojo-osc: #b81414;
+    --blanco: #ffffff;
+    --crema: #f4f7fc;
+    --tinta: #0f172a;
+    --gris: #52637a;
+    --sombra: 0 10px 26px rgba(11, 17, 56, .14);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(180deg, var(--verde-osc) 0%, #0a4634 55%, var(--crema) 55.01%, var(--crema) 100%);
+    background: linear-gradient(180deg, var(--azul-osc) 0%, var(--azul-vic) 220px, var(--crema) 220px, var(--crema) 100%);
     min-height: 100vh;
     color: var(--tinta);
     padding-bottom: env(safe-area-inset-bottom);
   }
   header {
     text-align: center;
-    padding: 26px 16px 18px;
+    padding: 24px 16px 20px;
     color: #fff;
+    position: relative;
   }
-  header .logo {
-    width: 84px; height: 84px; border-radius: 24px;
-    background: #fff; display: inline-flex; align-items: center; justify-content: center;
-    font-size: 44px; box-shadow: var(--sombra); margin-bottom: 12px;
+  .avatar-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 10px;
   }
-  header h1 { font-size: 1.45rem; letter-spacing: .3px; }
-  header p { opacity: .82; font-size: .92rem; margin-top: 4px; }
-  main { max-width: 680px; margin: 0 auto; padding: 8px 16px 32px; }
+  header .avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    object-fit: cover;
+    border: 3.5px solid var(--rojo-vic);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+    background: #fff;
+    display: block;
+  }
+  .avatar-badge {
+    position: absolute; right: -4px; bottom: 0;
+    background: var(--rojo-vic); color: #fff;
+    font-size: 13px; font-weight: 900;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.3);
+  }
+  header h1 {
+    font-size: 1.55rem; font-weight: 900; letter-spacing: .5px;
+    text-transform: uppercase; line-height: 1.15;
+  }
+  .badge-cargo {
+    display: inline-block;
+    background: var(--rojo-vic);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 999px;
+    margin-top: 6px;
+    box-shadow: 0 3px 10px rgba(229, 36, 36, .45);
+  }
+  header .lema {
+    opacity: .9;
+    font-size: .88rem;
+    font-weight: 600;
+    margin-top: 6px;
+    color: #d6e2ff;
+  }
+
+  /* Cenefa con grecas Chachapoya */
+  .grecas {
+    height: 12px;
+    width: 100%;
+    margin-top: 14px;
+    opacity: .35;
+    background-image: repeating-linear-gradient(45deg, #fff 0, #fff 2px, transparent 0, transparent 8px),
+                      repeating-linear-gradient(-45deg, #fff 0, #fff 2px, transparent 0, transparent 8px);
+    background-size: 16px 12px;
+  }
+
+  main { max-width: 680px; margin: 0 auto; padding: 4px 16px 32px; }
 
   .categoria { margin-top: 22px; }
   .categoria > h2 {
-    font-size: .8rem; text-transform: uppercase; letter-spacing: 1.5px;
-    color: var(--verde); display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    font-size: .82rem; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--azul-vic); font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
   }
-  .categoria > h2::after { content: ""; flex: 1; height: 1px; background: #cfe3d8; }
+  .categoria > h2::after { content: ""; flex: 1; height: 1.5px; background: var(--azul-borde); }
 
   .tarjeta {
     display: flex; align-items: center; gap: 14px;
@@ -56,45 +114,48 @@
     transition: transform .08s ease, border-color .12s ease;
     cursor: pointer;
   }
-  .tarjeta:active { transform: scale(.98); border-color: var(--verde); }
+  .tarjeta:active { transform: scale(.98); border-color: var(--azul-vic); }
   .tarjeta .emoji {
     font-size: 30px; width: 58px; height: 58px; flex: none;
-    background: var(--verde-clr); border-radius: 14px;
+    background: var(--azul-claro); border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--azul-borde);
   }
   .tarjeta .txt { flex: 1; min-width: 0; }
-  .tarjeta .txt b { font-size: 1.02rem; display: block; }
-  .tarjeta .txt small { color: #5a6b64; font-size: .82rem; display: block; margin-top: 3px; line-height: 1.35; }
+  .tarjeta .txt b { font-size: 1.02rem; display: block; color: #0b1138; }
+  .tarjeta .txt small { color: var(--gris); font-size: .82rem; display: block; margin-top: 3px; line-height: 1.35; }
   .tarjeta .tipo {
-    flex: none; font-size: .68rem; font-weight: 700; text-transform: uppercase;
-    background: var(--verde-clr); color: var(--verde);
-    padding: 4px 8px; border-radius: 999px;
+    flex: none; font-size: .68rem; font-weight: 800; text-transform: uppercase;
+    background: var(--azul-claro); color: var(--azul-vic);
+    padding: 5px 9px; border-radius: 999px;
+    border: 1px solid var(--azul-borde);
   }
-  .tarjeta .flecha { flex: none; color: var(--verde); font-size: 22px; }
+  .tarjeta .flecha { flex: none; color: var(--azul-vic); font-size: 22px; font-weight: bold; }
 
   .estado {
-    text-align: center; font-size: .8rem; color: #5a6b64;
+    text-align: center; font-size: .8rem; color: var(--gris);
     margin-top: 26px; padding: 0 20px; line-height: 1.5;
   }
   .estado .punto { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
   .estado .punto.ok { background: #22a06b; }
-  .estado .punto.off { background: #c0392b; }
+  .estado .punto.off { background: var(--rojo-vic); }
 
-  .cargando { text-align: center; padding: 40px; color: #5a6b64; }
-  .skel { background: #e7e2d4; border-radius: 16px; height: 84px; margin: 12px 0; }
+  .cargando { text-align: center; padding: 40px; color: var(--gris); }
+  .skel { background: #e2e8f5; border-radius: 16px; height: 84px; margin: 12px 0; }
 
   /* Aviso de instalación */
   #instalar {
     position: fixed; left: 12px; right: 12px; bottom: 12px;
-    background: #fff; border-radius: 16px; box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    background: #fff; border-radius: 16px; box-shadow: 0 12px 30px rgba(11,17,56,.3);
     padding: 14px 16px; display: none; gap: 12px; align-items: center; z-index: 50;
+    border: 1.5px solid var(--azul-borde);
   }
   #instalar.mostrar { display: flex; }
   #instalar .emoji { font-size: 26px; }
   #instalar p { flex: 1; font-size: .85rem; line-height: 1.4; }
   #instalar button {
-    background: var(--verde); color: #fff; border: 0; border-radius: 999px;
-    padding: 9px 16px; font-weight: 700; font-size: .85rem;
+    background: var(--azul-vic); color: #fff; border: 0; border-radius: 999px;
+    padding: 9px 16px; font-weight: 800; font-size: .85rem;
   }
 
   /* ====================================================================
@@ -163,9 +224,14 @@
 </head>
 <body>
 <header>
-  <div class="logo">⛰️</div>
-  <h1>Grimaldo Amazonas</h1>
-  <p>Propuestas y material para dirigirse al público</p>
+  <div class="avatar-wrap">
+    <img src="material/grimaldo-avatar.png" alt="Prof. Augusto Grimaldo Vásquez Tan" class="avatar">
+    <span class="avatar-badge">✌️</span>
+  </div>
+  <h1>GRIMALDO VÁSQUEZ TAN</h1>
+  <div class="badge-cargo">GOBERNADOR REGIONAL</div>
+  <p class="lema">Tu Victoria, Nuestra Victoria · Amazonas</p>
+  <div class="grecas"></div>
 </header>
 <main>
   <div id="menu" class="cargando">
