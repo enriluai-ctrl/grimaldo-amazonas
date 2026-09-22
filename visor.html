@@ -89,8 +89,10 @@
   const tZoom = document.getElementById('t-zoom');
 
   const nombre = decodeURIComponent(location.hash.slice(1)) || 'propuesta-integral.png';
-  img.src = nombre.startsWith('http') || nombre.startsWith('material/') || !nombre.includes('/')
-    ? nombre : 'material/' + nombre;
+  // Reglas de ruta: nombre suelto => material/ ; subruta (material/...) o URL completa => tal cual
+  const esUrl = nombre.startsWith('http') || nombre.startsWith('/');
+  const yaTieneRuta = nombre.includes('/');
+  img.src = esUrl || yaTieneRuta ? nombre : 'material/' + nombre;
   document.getElementById('t-titulo').textContent = nombre.split('/').pop().replace(/\.[a-z]+$/i, '').replace(/-/g, ' ');
 
   let escala = 1, escalaMin = 1, escalaMax = 8;
