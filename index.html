@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e7a5f">
+<title>Grimaldo Amazonas</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+  :root {
+    --verde: #0e7a5f;
+    --verde-osc: #07281d;
+    --verde-clr: #d9f2e7;
+    --crema: #f4efe3;
+    --tinta: #1d2a25;
+    --sombra: 0 10px 24px rgba(7, 40, 29, .16);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(180deg, var(--verde-osc) 0%, #0a4634 55%, var(--crema) 55.01%, var(--crema) 100%);
+    min-height: 100vh;
+    color: var(--tinta);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  header {
+    text-align: center;
+    padding: 26px 16px 18px;
+    color: #fff;
+  }
+  header .logo {
+    width: 84px; height: 84px; border-radius: 24px;
+    background: #fff; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 44px; box-shadow: var(--sombra); margin-bottom: 12px;
+  }
+  header h1 { font-size: 1.45rem; letter-spacing: .3px; }
+  header p { opacity: .82; font-size: .92rem; margin-top: 4px; }
+  main { max-width: 680px; margin: 0 auto; padding: 8px 16px 32px; }
+
+  .categoria { margin-top: 22px; }
+  .categoria > h2 {
+    font-size: .8rem; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--verde); display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  }
+  .categoria > h2::after { content: ""; flex: 1; height: 1px; background: #cfe3d8; }
+
+  .tarjeta {
+    display: flex; align-items: center; gap: 14px;
+    background: #fff; border-radius: 18px; padding: 16px;
+    box-shadow: var(--sombra); text-decoration: none; color: var(--tinta);
+    margin-bottom: 12px; border: 2px solid transparent;
+    transition: transform .08s ease, border-color .12s ease;
+  }
+  .tarjeta:active { transform: scale(.98); border-color: var(--verde); }
+  .tarjeta .emoji {
+    font-size: 30px; width: 58px; height: 58px; flex: none;
+    background: var(--verde-clr); border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tarjeta .txt { flex: 1; min-width: 0; }
+  .tarjeta .txt b { font-size: 1.02rem; display: block; }
+  .tarjeta .txt small { color: #5a6b64; font-size: .82rem; display: block; margin-top: 3px; line-height: 1.35; }
+  .tarjeta .tipo {
+    flex: none; font-size: .68rem; font-weight: 700; text-transform: uppercase;
+    background: var(--verde-clr); color: var(--verde);
+    padding: 4px 8px; border-radius: 999px;
+  }
+  .tarjeta .flecha { flex: none; color: var(--verde); font-size: 22px; }
+
+  .estado {
+    text-align: center; font-size: .8rem; color: #5a6b64;
+    margin-top: 26px; padding: 0 20px; line-height: 1.5;
+  }
+  .estado .punto { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .estado .punto.ok { background: #22a06b; }
+  .estado .punto.off { background: #c0392b; }
+
+  .cargando { text-align: center; padding: 40px; color: #5a6b64; }
+  .skel { background: #e7e2d4; border-radius: 16px; height: 84px; margin: 12px 0; }
+
+  /* Aviso de instalación (antes del primer "Añadir a pantalla de inicio") */
+  #instalar {
+    position: fixed; left: 12px; right: 12px; bottom: 12px;
+    background: #fff; border-radius: 16px; box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    padding: 14px 16px; display: none; gap: 12px; align-items: center; z-index: 50;
+  }
+  #instalar.mostrar { display: flex; }
+  #instalar .emoji { font-size: 26px; }
+  #instalar p { flex: 1; font-size: .85rem; line-height: 1.4; }
+  #instalar button {
+    background: var(--verde); color: #fff; border: 0; border-radius: 999px;
+    padding: 9px 16px; font-weight: 700; font-size: .85rem;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">⛰️</div>
+  <h1>Grimaldo Amazonas</h1>
+  <p>Propuestas y material para dirigirse al público</p>
+</header>
+<main>
+  <div id="menu" class="cargando">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+  </div>
+  <p class="estado"><span class="punto ok" id="pto"></span><span id="conexion">Actualizado</span><br>
+  Si agregas un material nuevo, se ve aquí al abrir de nuevo.</p>
+</main>
+
+<div id="instalar">
+  <span class="emoji">📲</span>
+  <p><b>Instala la app:</b> menú del navegador <b>⋮</b> → «Añadir a pantalla de inicio». Queda con ícono como cualquier app.</p>
+  <button id="instalar-btn">OK</button>
+</div>
+
+<script>
+  // Pinta el menú desde links.json (network-first: siempre busca la versión nueva)
+  const EMOJIS = { link: '🔗', slides: '🖼️', nota: '📝', pdf: '📄', video: '🎬' };
+
+  async function cargar() {
+    const resp = await fetch('links.json', { cache: 'no-store' });
+    if (!resp.ok) throw new Error('links.json ' + resp.status);
+    const datos = await resp.json();
+    const menu = document.getElementById('menu');
+    menu.innerHTML = '';
+    for (const cat of datos.categorias || []) {
+      const sec = document.createElement('section');
+      sec.className = 'categoria';
+      const h2 = document.createElement('h2');
+      h2.textContent = (cat.icono || '📌') + ' ' + cat.nombre;
+      sec.appendChild(h2);
+      for (const it of cat.items || []) {
+        const a = document.createElement('a');
+        a.className = 'tarjeta';
+        a.href = it.url;
+        if (it.tipo === 'pdf' || it.tipo === 'slides') a.target = '_blank'; a.rel = 'noopener';
+        const emoji = document.createElement('div');
+        emoji.className = 'emoji'; emoji.textContent = it.emoji || EMOJIS[it.tipo] || '🔗';
+        const txt = document.createElement('div');
+        txt.className = 'txt';
+        const b = document.createElement('b'); b.textContent = it.titulo;
+        const small = document.createElement('small'); small.textContent = it.nota || '';
+        txt.append(b); if (it.nota) txt.append(small);
+        const tipo = document.createElement('span');
+        tipo.className = 'tipo'; tipo.textContent = it.tipo === 'link' ? 'web' : it.tipo;
+        const fl = document.createElement('span');
+        fl.className = 'flecha'; fl.textContent = '›';
+        a.append(emoji, txt, tipo, fl);
+        sec.appendChild(a);
+      }
+      menu.appendChild(sec);
+    }
+    const pto = document.getElementById('pto');
+    const con = document.getElementById('conexion');
+    pto.className = 'punto ok';
+    con.textContent = 'Al día · ' + (datos.actualizado || '');
+  }
+
+  cargar().catch(() => {
+    const pto = document.getElementById('pto');
+    const con = document.getElementById('conexion');
+    pto.className = 'punto off';
+    con.textContent = 'Sin conexión · mostrando última copia guardada';
+  });
+
+  // Registrar service worker (base del modo app)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+
+  // Aviso de instalación mientras no sea app instalada
+  const aviso = document.getElementById('instalar');
+  const esApp = window.matchMedia('(display-mode: standalone)').matches
+             || window.navigator.standalone === true;
+  if (!esApp && !localStorage.getItem('avisoInstalacionVisto')) {
+    setTimeout(() => aviso.classList.add('mostrar'), 1500);
+  }
+  document.getElementById('instalar-btn').addEventListener('click', () => {
+    localStorage.setItem('avisoInstalacionVisto', '1');
+    aviso.classList.remove('mostrar');
+  });
+</script>
+</body>
+</html>

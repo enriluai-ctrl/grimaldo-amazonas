@@ -1,0 +1,29 @@
+{
+  "actualizado": "2026-09-22 08:50",
+  "categorias": [
+    {
+      "nombre": "Salud",
+      "icono": "🏥",
+      "items": [
+        {
+          "titulo": "Salud Amazonas — Telemedicina",
+          "tipo": "link",
+          "url": "https://enrilubo.github.io/salud-amazonas-landing/",
+          "nota": "Propuesta completa: postas rurales, equipos Bluetooth, IA clínica"
+        }
+      ]
+    },
+    {
+      "nombre": "Educación",
+      "icono": "🎓",
+      "items": [
+        {
+          "titulo": "Educación Amazonas — Propuestas",
+          "tipo": "link",
+          "url": "https://enriluai-ctrl.github.io/educacion-amazonas/landing.html#propuestas",
+          "nota": "Las 5 palancas: Maestro Rural, colegios técnicos, red Awajún-Wampis"
+        }
+      ]
+    }
+  ]
+}
