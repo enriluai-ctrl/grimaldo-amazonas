@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0e7a5f">
+<title>Imagen — Grimaldo Amazonas</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; overflow: hidden; background: #07281d; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+  /* Barra superior */
+  #barra {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+    display: flex; align-items: center; gap: 10px;
+    padding: calc(8px + env(safe-area-inset-top)) 14px 8px;
+    background: linear-gradient(180deg, rgba(7,40,29,.96), rgba(7,40,29,.82));
+    backdrop-filter: blur(6px);
+    color: #fff; transform: translateY(0); transition: transform .25s ease;
+  }
+  #barra.oculta { transform: translateY(-110%); }
+  #barra a.atras {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 12px;
+    background: rgba(255,255,255,.14); color: #fff; font-size: 22px;
+    text-decoration: none;
+  }
+  #barra .titulo { flex: 1; min-width: 0; }
+  #barra .titulo b { display: block; font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #barra .titulo small { opacity: .7; font-size: .75rem; }
+  #barra .zoomnivel {
+    font-size: .75rem; font-weight: 700; background: rgba(255,255,255,.14);
+    padding: 6px 10px; border-radius: 999px; min-width: 52px; text-align: center;
+  }
+
+  /* Lienzo de zoom */
+  #escena {
+    position: fixed; inset: 0; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    touch-action: none; /* los gestos los maneja el código */
+  }
+  #escena img {
+    max-width: 100vw; max-height: 100vh;
+    user-select: none; -webkit-user-drag: none;
+    transition: opacity .3s ease; opacity: 0;
+  }
+  #escena img.lista { opacity: 1; }
+
+  /* Indicador de ayuda */
+  #ayuda {
+    position: fixed; bottom: calc(18px + env(safe-area-inset-bottom)); left: 50%;
+    transform: translateX(-50%); z-index: 10;
+    background: rgba(0,0,0,.55); color: #fff; font-size: .8rem;
+    padding: 8px 14px; border-radius: 999px; pointer-events: none;
+    transition: opacity .4s ease; white-space: nowrap;
+  }
+
+  #cargando {
+    position: fixed; inset: 0; z-index: 5; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px; color: #9ed8be;
+    background: #07281d; font-size: .9rem; transition: opacity .3s;
+  }
+  #cargando .giro {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 3px solid rgba(158,216,190,.25); border-top-color: #9ed8be;
+    animation: girar 1s linear infinite;
+  }
+  @keyframes girar { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="cargando"><div class="giro"></div>Cargando imagen…</div>
+<div id="escena"><img id="imagen" alt=""></div>
+<div id="barra">
+  <a class="atras" href="./" aria-label="Volver al menú">‹</a>
+  <div class="titulo"><b id="t-titulo">Imagen</b><small>pellizca para zoom · doble toque para acercar</small></div>
+  <div class="zoomnivel" id="t-zoom">100%</div>
+</div>
+<div id="ayuda">Pellizca para hacer zoom</div>
+
+<script>
+  // Visor de imágenes con zoom por gestos (pinza + doble toque), sin librerías.
+  // URL: visor.html#imagen.png  (la imagen vive junto a este archivo o en material/)
+  const img = document.getElementById('imagen');
+  const escena = document.getElementById('escena');
+  const barra = document.getElementById('barra');
+  const ayuda = document.getElementById('ayuda');
+  const tZoom = document.getElementById('t-zoom');
+
+  const nombre = decodeURIComponent(location.hash.slice(1)) || 'propuesta-integral.png';
+  img.src = nombre.startsWith('http') || nombre.startsWith('material/') || !nombre.includes('/')
+    ? nombre : 'material/' + nombre;
+  document.getElementById('t-titulo').textContent = nombre.split('/').pop().replace(/\.[a-z]+$/i, '').replace(/-/g, ' ');
+
+  let escala = 1, escalaMin = 1, escalaMax = 8;
+  let ox = 0, oy = 0;            // offset de la imagen (px)
+  let p0 = null, p1 = null;      // punteros activos
+  let inicio = null;             // estado al iniciar el gesto
+  let movio = false, ultimoTap = 0;
+
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+  function aplicar() {
+    // mantener la imagen dentro de limits razonables cuando esta ampliada
+    const r = img.getBoundingClientRect();
+    const maxX = Math.max(0, (r.width * escala - innerWidth) / 2) + 40;
+    const maxY = Math.max(0, (r.height * escala - innerHeight) / 2) + 40;
+    ox = clamp(ox, -maxX, maxX);
+    oy = clamp(oy, -maxY, maxY);
+    img.style.transform = `translate(${ox}px, ${oy}px) scale(${escala})`;
+    tZoom.textContent = Math.round(escala * 100) + '%';
+  }
+
+  img.addEventListener('load', () => {
+    document.getElementById('cargando').style.opacity = '0';
+    setTimeout(() => document.getElementById('cargando').remove(), 350);
+    img.classList.add('lista');
+    setTimeout(() => { ayuda.style.opacity = '0'; }, 2600);
+  });
+  img.addEventListener('error', () => {
+    document.getElementById('cargando').innerHTML = 'No se pudo cargar la imagen.<br><a href="./" style="color:#ffd76e">Volver al menú</a>';
+  });
+
+  function datosToque(e) {
+    const ts = [...e.touches];
+    if (ts.length === 0) return null;
+    if (ts.length === 1) return { x: ts[0].clientX, y: ts[0].clientY, dist: 0, cx: ts[0].clientX, cy: ts[0].clientY };
+    const [a, b] = ts;
+    return {
+      x: a.clientX, y: a.clientY,
+      dist: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY),
+      cx: (a.clientX + b.clientX) / 2, cy: (a.clientY + b.clientY) / 2
+    };
+  }
+
+  escena.addEventListener('touchstart', (e) => {
+    movio = false;
+    p0 = datosToque(e);
+    inicio = { escala, ox, oy, p: p0 };
+  }, { passive: true });
+
+  escena.addEventListener('touchmove', (e) => {
+    if (!inicio) return;
+    e.preventDefault();
+    p1 = datosToque(e);
+    movio = true;
+    if (p1.dist && inicio.p.dist) {
+      // pinza: zoom centrado en el punto medio
+      const factor = p1.dist / inicio.p.dist;
+      const nueva = clamp(inicio.escala * factor, escalaMin, escalaMax);
+      const k = nueva / inicio.escala;
+      // punto medio relativo al centro de pantalla
+      const dx = p1.cx - innerWidth / 2, dy = p1.cy - innerHeight / 2;
+      ox = dx - (dx - inicio.ox) * k;
+      oy = dy - (dy - inicio.oy) * k;
+      escala = nueva;
+    } else {
+      // arrastre con un dedo (solo si hay zoom)
+      ox = inicio.ox + (p1.cx - inicio.p.cx);
+      oy = inicio.oy + (p1.cy - inicio.p.cy);
+      if (escala <= 1.001) { ox = 0; oy = 0; }
+    }
+    aplicar();
+  }, { passive: false });
+
+  escena.addEventListener('touchend', (e) => {
+    if (!movio && e.changedTouches.length === 1) {
+      const t = e.changedTouches[0];
+      const ahora = Date.now();
+      if (ahora - ultimoTap < 300) {
+        // doble toque: alternar 1x <-> 2.5x centrado donde toco
+        const destino = escala > 1.05 ? 1 : 2.5;
+        if (destino > 1) {
+          const dx = t.clientX - innerWidth / 2, dy = t.clientY - innerHeight / 2;
+          const k = destino / escala;
+          ox = dx - (dx - ox) * k;
+          oy = dy - (dy - oy) * k;
+        }
+        escala = destino;
+        if (escala <= 1.001) { ox = 0; oy = 0; }
+        aplicar();
+      }
+      ultimoTap = ahora;
+    }
+    if (e.touches.length === 0) { inicio = null; }
+    else { p0 = datosToque(e); inicio = { escala, ox, oy, p: p0 }; }
+  });
+
+  // Mouse (para probar en PC): rueda = zoom, arrastre = mover
+  let mouseAbajo = false, mouseIni = null;
+  escena.addEventListener('mousedown', (e) => { mouseAbajo = true; mouseIni = { x: e.clientX, y: e.clientY, ox, oy }; });
+  addEventListener('mouseup', () => { mouseAbajo = false; });
+  addEventListener('mousemove', (e) => {
+    if (!mouseAbajo || escala <= 1.001) return;
+    ox = mouseIni.ox + (e.clientX - mouseIni.x);
+    oy = mouseIni.oy + (e.clientY - mouseIni.y);
+    aplicar();
+  });
+  escena.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+    const nueva = clamp(escala * factor, escalaMin, escalaMax);
+    const k = nueva / escala;
+    const dx = e.clientX - innerWidth / 2, dy = e.clientY - innerHeight / 2;
+    ox = dx - (dx - ox) * k;
+    oy = dy - (dy - oy) * k;
+    escala = nueva;
+    if (escala <= 1.001) { ox = 0; oy = 0; }
+    aplicar();
+  }, { passive: false });
+
+  // Ocultar barra al hacer zoom fuerte
+  const obs = new MutationObserver(() => {
+    barra.classList.toggle('oculta', escala > 1.6);
+  });
+  obs.observe(tZoom, { childList: true });
+</script>
+</body>
+</html>

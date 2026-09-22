@@ -119,7 +119,7 @@
 
 <script>
   // Pinta el menú desde links.json (network-first: siempre busca la versión nueva)
-  const EMOJIS = { link: '🔗', slides: '🖼️', nota: '📝', pdf: '📄', video: '🎬' };
+  const EMOJIS = { link: '🔗', slides: '🖼️', nota: '📝', pdf: '📄', video: '🎬', imagen: '🖼️' };
 
   async function cargar() {
     const resp = await fetch('links.json', { cache: 'no-store' });
@@ -137,7 +137,7 @@
         const a = document.createElement('a');
         a.className = 'tarjeta';
         a.href = it.url;
-        if (it.tipo === 'pdf' || it.tipo === 'slides') a.target = '_blank'; a.rel = 'noopener';
+        if (it.tipo === 'pdf' || it.tipo === 'slides' || it.tipo === 'imagen') { a.target = '_blank'; a.rel = 'noopener'; }
         const emoji = document.createElement('div');
         emoji.className = 'emoji'; emoji.textContent = it.emoji || EMOJIS[it.tipo] || '🔗';
         const txt = document.createElement('div');

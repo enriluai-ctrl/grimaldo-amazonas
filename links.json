@@ -1,6 +1,19 @@
 {
-  "actualizado": "2026-09-22 08:50",
+  "actualizado": "2026-09-22 09:10",
   "categorias": [
+    {
+      "nombre": "Para mostrar al público",
+      "icono": "⭐",
+      "items": [
+        {
+          "titulo": "Propuesta integral en una imagen",
+          "tipo": "imagen",
+          "emoji": "🖼️",
+          "url": "visor.html#propuesta-integral.png",
+          "nota": "Salud + Educación en una sola lámina, con zoom para mostrar detalles"
+        }
+      ]
+    },
     {
       "nombre": "Salud",
       "icono": "🏥",
