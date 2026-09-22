@@ -88,19 +88,26 @@
   const ayuda = document.getElementById('ayuda');
   const tZoom = document.getElementById('t-zoom');
 
-  const nombre = decodeURIComponent(location.hash.slice(1)) || 'propuesta-integral.png';
-  // Reglas de ruta: nombre suelto => material/ ; subruta (material/...) o URL completa => tal cual
-  const esUrl = nombre.startsWith('http') || nombre.startsWith('/');
-  const yaTieneRuta = nombre.includes('/');
-  img.src = esUrl || yaTieneRuta ? nombre : 'material/' + nombre;
   const TITULOS = {
     'ruta-salud.png': 'Ruta de Salud (Telemedicina)',
     'ruta-educacion.png': 'Ruta de Educación (Colegios Técnicos)',
     'ruta-desarrollo.png': 'Ruta del Desarrollo (5 Pasos)',
     'propuesta-integral.png': 'Cifras y Sustento Integral'
   };
-  const baseNombre = nombre.split('/').pop();
-  document.getElementById('t-titulo').textContent = TITULOS[baseNombre] || baseNombre.replace(/\.[a-z]+$/i, '').replace(/-/g, ' ');
+
+  function cargarImagen() {
+    const nombre = decodeURIComponent(location.hash.slice(1)) || 'propuesta-integral.png';
+    const esUrl = nombre.startsWith('http') || nombre.startsWith('/');
+    const yaTieneRuta = nombre.includes('/');
+    img.src = esUrl || yaTieneRuta ? nombre : 'material/' + nombre;
+    const baseNombre = nombre.split('/').pop();
+    document.getElementById('t-titulo').textContent = TITULOS[baseNombre] || baseNombre.replace(/\.[a-z]+$/i, '').replace(/-/g, ' ');
+    escala = 1; ox = 0; oy = 0;
+    aplicar();
+  }
+
+  window.addEventListener('hashchange', cargarImagen);
+  cargarImagen();
 
   let escala = 1, escalaMin = 1, escalaMax = 8;
   let ox = 0, oy = 0;            // offset de la imagen (px)
